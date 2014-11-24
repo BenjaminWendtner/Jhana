@@ -100,7 +100,7 @@ class UserController extends ApplicationController {
 Simple, isn't it? Each Controller-Action calls either ```self::render(...);``` or ```self::redirect(...);``` and can pass parameters to views in the render-method (like shown above). The second parameter of the render method is optional and sets the page-title for the view. If you ommit this title-parameter, Jhana will then use your Application title as defined in your config.php. 
 
 
-Controllers also provide filtering. Filters are always executed BEFORE an action is called. Filter function names have to begin with "filter_". They can be used as follows:
+Controllers also provide filtering. Filters are always executed BEFORE an action is called. A convention is, that filter functionnames begin with "filter_". They can be used as follows:
 ```php
 class UserController extends ApplicationController {
 

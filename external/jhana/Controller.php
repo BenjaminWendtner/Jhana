@@ -12,7 +12,7 @@
 	       self::$router = $router;
 	   	}
 		
-		/*
+		/**
 		 * The filter method
 		 */	
 		public static function filter() {
@@ -27,7 +27,7 @@
 			}
 		}
 		
-		/*
+		/**
 		 * The render method
 		 */	
 		protected static function render($params=[], $title='') {
@@ -54,7 +54,7 @@
 	
 		}
 		
-		/*
+		/**
 		 * The redirect method
 		 */	
 		protected static function redirect($url) {

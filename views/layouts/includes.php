@@ -12,7 +12,7 @@
 		<script src="<?php echo BASE_PATH; ?>external/bootstrap/js/bootstrap.min.js"></script>
 		
 		<!-- Pjax -->
-		<script src="<?php echo BASE_PATH; ?>external/pjax/pjax.js"></script>
+		<script src="<?php echo BASE_PATH; ?>external/pjax/pjax.min.js"></script>
 		
 		<!-- Load Javascript -->
 		<script src="<?php echo BASE_PATH; ?>external/jhana/script.js"></script>
@@ -23,9 +23,8 @@
 		<?php foreach(recursive_glob('assets/css/*.css') as $css) ?>
 			<link href="<?php echo $css; ?>" rel="stylesheet">
 		
-		<!-- Load Less -->
+		<!-- Load Less (from cache if possible) -->
 		<?php 
-			// Only compile less-files if necessary
 			require 'external/less/Cache.php';
 			Less_Cache::$cache_dir = 'external/less/cache';
 			
