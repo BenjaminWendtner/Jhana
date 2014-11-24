@@ -46,7 +46,7 @@ $user->update(['name' => 'Bart Simpson']);
 
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
 ```
-For more details (ORDER, LIMIT ...), please have look at http://medoo.in/api/where until we can provide you better documentation.
+For more details (ORDER, LIMIT ...), please have look at http://medoo.in/api/where until we can provide you a better documentation.
 
 Jhana also provides more advanced features like Relations, Validations and Callbacks.
 Here an example for **Relations**:
