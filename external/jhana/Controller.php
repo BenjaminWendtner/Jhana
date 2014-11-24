@@ -50,7 +50,7 @@
 				require_once 'views/layouts/layout.php';
 				echo '</div>';
 			} else
-				require_once 'views/layouts/includes.php';
+				require_once 'views/layouts/main.php';
 	
 		}
 		

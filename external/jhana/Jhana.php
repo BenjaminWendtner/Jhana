@@ -14,6 +14,10 @@
 			$_SESSION['language'] = $language;
 		}
 		
+		public static function load_assets() {
+			require_once 'Assets.php';
+		}
+		
 		public static function recursive_glob($pattern, $flags = 0) {
 	    	$files = glob($pattern, $flags);
 	     	foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)

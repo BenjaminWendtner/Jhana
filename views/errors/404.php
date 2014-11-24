@@ -1,1 +1,1 @@
-404 - Diese Seite wurde leider nicht gefunden!
+404 - Site could not be found!
