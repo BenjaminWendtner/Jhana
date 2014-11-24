@@ -44,7 +44,7 @@ $user->update(['name' => 'Bart Simpson']);
 $users = User::find_by_column('name', 'Bart Simpson')[0];
 $user->delete();
 
-$user = User::create(['name' => 'Homer Simpson', 'email' => 'homer.simpson@springfield.com']);
+$user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
 ```
 
 Jhana also provides more advanced features like Relations, Validations and Callbacks.
