@@ -16,6 +16,9 @@
 	define('DB_TYPE',		 'mysql'); 
 
 	/* Use this in a controller filter when you are calling an action with a cronjob */
-	define('CRONJOB_SECRET', '');
+	//define('CRONJOB_SECRET', '');
+	
+	/* Language fallback, if no language is defined which language should be used? */
+	//define('DEFAULT_LANGUAGE', 'en');
 
 ?>

@@ -48,7 +48,7 @@
 	require_once 'controllers/'.$controller_name.'.php';
 		
 	// Require all helpers
-	require_once 'external/jhana/Helper.php';
+	require_once 'external/jhana/Jhana.php';
 	foreach(glob('helpers/*.php') as $helper)
 	    require_once $helper;
 	

@@ -16,7 +16,8 @@ Here are some Core-Features of Jhana:
 + Uses Pjax by default
 + LESS Support (Serverside compiled and cached)
 + PHP - Routing
-+ Database abstraction (Supports MySQL, SQLite, PostgresSQL, Oracle, etc.)
++ Localization
++ Database abstraction (Supports MySQL, SQLite, PostgresSQL, Oracle and so on)
 
 
 ### Installation
@@ -64,7 +65,7 @@ Those relations could then be used as follows:
 $user_tasks = $user->tasks();
 ```
 
-**Validation** are executed automatically if a model gets saved. The Validation functionname has to begin with "validate_". The return value has to be boolean.
+**Validations** are executed automatically if a model gets saved. The Validation functionname has to begin with "validate_". The return value has to be boolean.
 
 ```php
 public function validate_password() {
@@ -148,10 +149,16 @@ This becomes very handy for generating links for example.
 
 ### Code the views
 Views contain all the HTML. Each Controller gets an extra View folder. Each Controller-Action gets an extra PHP-file which is named after the action. You can use all the Variables you passed via the controller render-method.
-An important file is the *views/layout/layout.php*. Every view is rendered into this layout file. So you could use the layout for things that stay the same for each view, like Header, Footer etc.
+An important file is the *views/layout/layout.php*. Every view is rendered into this layout file. So you could use the layout for things that stay the same for each view, like Header, Footer and so on.
 
 ### Assets
 The assets are devided into three parts: JavaScript, CSS and Images. Feel free to add any subfolders to the JS or the CSS folders. All these files will be automatically loaded recursively anyways. Jhana imports the Bootstrap-Frontend Framework by default. For Stylesheets you could use CSS and LESS. Also Pjax is used to provide the fastest possible site-loading. For all those things, you have to configure nothing, just enjoy the magic ;-)
 
 ### Helpers
 You can use the Helpers-Folder to create your own Helpers. Helper methods can be executed everywhere but we would recommend to use them in views.
+
+### Localization
+Jhana also supports localization. Put your language files into *config/languages/* folder and name them appropriately ("en.php", "de.php" and so on).
+Use the function ```php Jhana::set_language('en');``` to set the session to this language.
+Then use ```php Jhana::t(...);``` to print your translations.
+
