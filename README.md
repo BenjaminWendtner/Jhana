@@ -35,11 +35,16 @@ An object of this class would already has all the fields, the database table has
 Here is an example on how you could use this:
 ```php
 $user = User::find(23);
-$user->name = 'Max Mustermann';
+$user->name = 'Homer Simpson';
 $user->save();
 
-$user = User::find_by_column('name', 'Max Mustermann');
+$user = User::find_by(['name' => 'Homer Simpson'])[0];
+$user->update(['name' => 'Bart Simpson']);
+
+$users = User::find_by_column('name', 'Bart Simpson')[0];
 $user->delete();
+
+$user = User::create(['name' => 'Homer Simpson', 'email' => 'homer.simpson@springfield.com']);
 ```
 
 Jhana also provides more advanced features like Relations, Validations and Callbacks.
