@@ -31,14 +31,14 @@ class User extends Model {
 }
 ```
 
-An object of this class would already has all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, find_by, sql, create, save, delete, validate.*
+An object of this class would already has all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, find_by, find_by_columm, sql, create, update, save, delete, validate.*
 Here is an example on how you could use this:
 ```php
 $user = User::find(23);
 $user->name = 'Max Mustermann';
 $user->save();
 
-$user = User::find_by('name', 'Max Mustermann');
+$user = User::find_by_column('name', 'Max Mustermann');
 $user->delete();
 ```
 

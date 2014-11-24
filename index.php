@@ -38,6 +38,7 @@
 	
 	// Require all models
 	require_once 'external/jhana/Model.php';
+	Model::set_database(new medoo());
 	foreach(glob('models/*.php') as $model)
 	    require_once $model;
 

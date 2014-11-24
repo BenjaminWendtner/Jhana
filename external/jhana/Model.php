@@ -6,14 +6,20 @@
 	 * Do NOT change this class, unless your know what you're doing!
 	 */
 	class Model {
+		
+		protected static $database;
+		
+		
+		public static function set_database($database) {
+	       self::$database = $database;
+	   	}
 				
 		/**
 		 * The all method
 		 * @return array of objects
 		 */
 		public static function all() {
-			$database = new medoo();
-			$records = $database->select(static::$table_name, "*");
+			$records = self::$database->select(static::$table_name, "*");
 			return self::mapObjects($records);
 		} 
 		
@@ -23,8 +29,7 @@
 		 * @return integer
 		 */
 		public static function count($params=[]) {
-			$database = new medoo();
-			$count = $database->count(static::$table_name, $params);
+			$count = self::$database->count(static::$table_name, $params);
 			return $count;
 		} 
 		
@@ -34,8 +39,7 @@
 		 * @return Object
 		 */
 		public static function find($id) {
-			$database = new medoo();
-			$records = $database->select(static::$table_name, '*', ['id' => $id]);
+			$records = self::$database->select(static::$table_name, '*', ['id' => $id]);
 			return self::mapObjects($records)[0];
 		} 
 
@@ -44,9 +48,18 @@
 		 * @param $column, $value: Represents the SQL-WHERE statement
 		 * @return array of objects
 		 */
-		public static function find_by($column, $value) {
-			$database = new medoo();
-			$records = $database->select(static::$table_name, '*', [$column => $value]);
+		public static function find_by_column($column, $value) {
+			$records = self::$database->select(static::$table_name, '*', [$column => $value]);
+			return self::mapObjects($records);
+		} 
+		
+		/**
+		 * The find-by method
+		 * @param $params Represents the SQL-WHERE statement
+		 * @return array of objects
+		 */
+		public static function find_by($params) {
+			$records = self::$database->select(static::$table_name, '*', $params);
 			return self::mapObjects($records);
 		} 
 		
@@ -63,8 +76,7 @@
 				foreach ($params as $param)
 					$query = preg_replace('/\?/', $param, $query, 1);
 			
-			$database = new medoo();
-			$records = $database->query($query);
+			$records = self::$database->query($query);
 			return self::mapObjects($records);
 		} 
 		
@@ -75,20 +87,18 @@
 		 */
 		public static function create($params) {
 			
-			unset($params['id']);
 			$obj = new static;
 			foreach ($params as $key => $value)
 				$obj->$key = $value;
 			
 			if (!$obj->validate()) return FALSE;
 			
-			$database = new medoo();
-			$database->insert(static::$table_name, $params);
+			$obj->id = self::$database->insert(static::$table_name, $params);
 			
 			if (method_exists($obj, 'callback_save'))
 				$obj->callback_save();
 			
-			return TRUE;
+			return $obj;
 		} 
 		
 		/**
@@ -99,18 +109,34 @@
 			
 			if (!$this->validate()) return FALSE;
 			
-			$database = new medoo();
-			
 			if (empty($this->id))
-				$this->id = $database->insert(static::$table_name, (array)$this);
+				$this->id = self::$database->insert(static::$table_name, (array)$this);
 			else
-				$database->update(static::$table_name, (array)$this, ['id' => $this->id]);
+				self::$database->update(static::$table_name, (array)$this, ['id' => $this->id]);
 			
 			if (method_exists($this, 'callback_save'))
 				$this->callback_save();
 
 			return TRUE;
 		}
+
+		/**
+		 * The update method.
+		 * @param $params: The params for updating
+		 * @return boolean
+		 */
+		public function update($params) {
+			
+			if (!$this->validate() || empty($this->id)) return FALSE;
+			
+			self::$database->update(static::$table_name, $params, ['id' => $this->id]);
+			
+			if (method_exists($this, 'callback_save'))
+				$this->callback_save();
+
+			return TRUE;
+		} 
+		
 		
 		/**
 		 * The delete method
@@ -121,8 +147,7 @@
 			if (method_exists($this, 'callback_delete'))
 				$this->callback_delete();
 			
-			$database = new medoo();
-			return $database->delete(static::$table_name, ['id' => $this->id]);
+			return self::$database->delete(static::$table_name, ['id' => $this->id]);
 		}
 		
 		/**
