@@ -9,6 +9,7 @@ Jhana is a PHP-Framework which is very strongly oriented towards Ruby on Rails. 
 
 Here are some Core-Features of Jhana:
 
++ Lightweight
 + MVC-Structure
 + Easy to install (Drag & Drop the folder)
 + Completely self-contained
