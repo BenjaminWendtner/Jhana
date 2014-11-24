@@ -41,7 +41,7 @@ $user->save();
 $user = User::find_by(['name' => 'Homer Simpson'])[0];
 $user->update(['name' => 'Bart Simpson']);
 
-$users = User::find_by_column('name', 'Bart Simpson')[0];
+$user = User::find_by_column('name', 'Bart Simpson')[0];
 $user->delete();
 
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
