@@ -42,16 +42,6 @@
 			$records = self::$database->select(static::$table_name, '*', ['id' => $id]);
 			return self::mapObjects($records)[0];
 		} 
-
-		/**
-		 * The find-by-column method
-		 * @param $column, $value: Represents the SQL-WHERE statement
-		 * @return array of objects
-		 */
-		public static function find_by_column($column, $value) {
-			$records = self::$database->select(static::$table_name, '*', [$column => $value]);
-			return self::mapObjects($records);
-		} 
 		
 		/**
 		 * The find-by method
