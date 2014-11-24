@@ -27,7 +27,7 @@ Each Model represents a table in your database. All columns are mapped automatic
 class User extends Model {
 		
 	// Table name
-	static protected $table_name = 'users';
+	protected static $table_name = 'users';
 }
 ```
 
@@ -105,7 +105,7 @@ Controllers also provide filtering. Filters are always executed BEFORE an action
 class UserController extends ApplicationController {
 
   	// The filter array maps filters to actions
-	static protected $filters = [
+	protected static $filters = [
 		'filter_test' => ['index']
 	];
 		
