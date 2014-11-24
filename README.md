@@ -22,7 +22,7 @@ Here are some Core-Features of Jhana:
 Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. Each table in your database should have an "id" autoincrement column. Jhana uses this for the Object Realtional Mapping.
 
 ### Creating Models
-Each Models represents a database table. All columns are mapped automatically. A simple Model could look like this. 
+Each Model represents a table in your database. All columns are mapped automatically. A simple Model could look like this. 
 ```php
 class User extends Model {
 		
@@ -32,7 +32,7 @@ class User extends Model {
 ```
 
 An object of this class would already has all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, find_by, sql, create, save, delete, validate.*
-Here is an example on you could use this:
+Here is an example on how you could use this:
 ```php
 $user = User::find(23);
 $user->name = 'Max Mustermann';
