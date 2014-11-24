@@ -8,16 +8,16 @@
 <!-- Pjax -->
 <script src="<?php echo BASE_PATH; ?>external/pjax/pjax.min.js"></script>
 
-<!-- Load Javascript -->
+<!-- Javascript -->
 <script src="<?php echo BASE_PATH; ?>external/jhana/script.js"></script>
 <?php foreach(Jhana::recursive_glob('assets/js/*.js') as $javascript) ?>
 	<script src="<?php echo $javascript; ?>"></script>
 
-<!-- Load CSS (recommend using less) -->
+<!-- CSS -->
 <?php foreach(Jhana::recursive_glob('assets/css/*.css') as $css) ?>
 	<link href="<?php echo $css; ?>" rel="stylesheet">
 
-<!-- Load Less (from cache if possible) -->
+<!-- Less -->
 <?php 
 	require 'external/less/Cache.php';
 	Less_Cache::$cache_dir = 'external/less/cache';

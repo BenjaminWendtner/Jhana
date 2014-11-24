@@ -13,7 +13,7 @@
 	   	}
 		
 		/**
-		 * The filter method
+		 * Calls all filters which are defined in the controllers.
 		 */	
 		public static function filter() {
 			
@@ -28,7 +28,10 @@
 		}
 		
 		/**
-		 * The render method
+		 * Renders a specific view from the views folder by using the
+		 * controller and action names. 
+		 * @param $params: The params which should be passed to the view.
+		 * @param $title: Optional the HTML-Title which should be updated in the view.
 		 */	
 		protected static function render($params=[], $title='') {
 			
@@ -39,7 +42,7 @@
 			foreach ($params as $key => $value)
 				$$key = $value;
 			
-			// Pagetitle
+			// Use default pagetitle if no title is provided
 			if ($title == '')
 				$title = APP_TITLE;
 			
@@ -55,7 +58,8 @@
 		}
 		
 		/**
-		 * The redirect method
+		 * Redirects the user to another site.
+		 * @param $url: The url where the user should be redirected.
 		 */	
 		protected static function redirect($url) {
 			if (isset($_SERVER['HTTP_X_PJAX']))

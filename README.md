@@ -162,5 +162,5 @@ You can use the Helpers-Folder to create your own Helpers. Helper methods can be
 ### Localization
 Jhana also supports localization. Put your language files into *config/languages/* folder and name them appropriately ("en.php", "de.php" and so on).
 Use the function ```Jhana::set_language('en');``` to set the session to this language.
-Then use ```Jhana::t(...);``` to print your translations.
+Then use ```Jhana::t(...);``` to print your translations. You can set your default language in *config/config.php*
 
