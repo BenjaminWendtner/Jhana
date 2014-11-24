@@ -11,6 +11,7 @@ Here are some Core-Features of Jhana:
 
 + MVC-Structure
 + Easy to install (Drag & Drop the folder)
++ Completely self-contained
 + Includes Bootstrap by default
 + Uses Pjax by default
 + LESS Support (Serverside compiled and cached)
