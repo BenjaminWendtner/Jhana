@@ -16,11 +16,11 @@
 		
 		<!-- Load Javascript -->
 		<script src="<?php echo BASE_PATH; ?>external/jhana/script.js"></script>
-		<?php foreach(recursive_glob('assets/js/*.js') as $javascript) ?>
+		<?php foreach(JhanaHelper::recursive_glob('assets/js/*.js') as $javascript) ?>
 			<script src="<?php echo $javascript; ?>"></script>
 		
 		<!-- Load CSS (recommend using less) -->
-		<?php foreach(recursive_glob('assets/css/*.css') as $css) ?>
+		<?php foreach(JhanaHelper::recursive_glob('assets/css/*.css') as $css) ?>
 			<link href="<?php echo $css; ?>" rel="stylesheet">
 		
 		<!-- Load Less (from cache if possible) -->
@@ -29,7 +29,7 @@
 			Less_Cache::$cache_dir = 'external/less/cache';
 			
 			$files = array();
-			foreach(recursive_glob('assets/css/*.less') as $less)
+			foreach(JhanaHelper::recursive_glob('assets/css/*.less') as $less)
 				$files[$less] = $less;
 		
 			$css_file_name = Less_Cache::Get($files);
