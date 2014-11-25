@@ -112,23 +112,25 @@ class UserController extends ApplicationController {
 
   	// The filter array maps filters to actions
 	protected static $filters = [
-		'filter_test' => ['index']
+		'filter_test' => ['show']
 	];
 		
 	// An ordinary action
-	static function index($params) {
-		$users = User::all();
-		self::render(['users' => $users]);
+	static function show($params) {
+		$user = User::find($params['id']);
+		self::render(['user' => $user]);
 	}
 
-  	// This filter function is executed before index() will be called 
-	protected static function filter_test() {
+  	// This filter function is executed before show() is executed
+	protected static function filter_test(&params) {
 		// Could do everything here...
 		if (empty($_SESSION["user_id"]))
 				self::redirect('http://www.google.at');
 	}
 }
 ```
+We pass the *&params* to each filter, so that we can modify all request parameters before the action gets called.
+
 
 ### Map routes
 Since we have our Controller Actions, now is the time to route the URLs. Jhana uses the AltoRouter-PHP Plugin.

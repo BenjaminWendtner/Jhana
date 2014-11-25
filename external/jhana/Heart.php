@@ -56,7 +56,7 @@
 	$controller_name::set_router($router);
 	
 	// Execute filters
-	$controller_name::filter();
+	$controller_name::filter($match['params']);
 
 	// Call action
 	$controller_name::$_GET['action']($match['params']);

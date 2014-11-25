@@ -15,14 +15,14 @@
 		/**
 		 * Calls all filters which are defined in the controllers.
 		 */	
-		public static function filter() {
+		public static function filter(&$params) {
 			
 			if (isset(static::$filters) == FALSE) return;
 			
 			foreach (static::$filters as $filter_name => $actions) {
 				foreach ($actions as $action) {
 					if ($_GET['action'] == $action)
-						static::$filter_name();
+						static::$filter_name($params);
 				}
 			}
 		}
@@ -54,7 +54,8 @@
 				echo '</div>';
 			} else
 				require_once 'views/layouts/main.php';
-	
+			
+			exit;
 		}
 		
 		/**
@@ -66,6 +67,8 @@
 				echo $url;
 			else	
 				header('Location: '.$url);
+			
+			exit;
 		}		
 
 		
