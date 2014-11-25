@@ -61,9 +61,9 @@ public function users() {
 	return $this->has_many('User');
 }
 
-// Has Many through n:m table relation
-// The second parameter is the n:m tables name.
-public function posts() {
+// Has Many through n:m table relation.
+// The second parameter is the n:m table name.
+public function users() {
 	return $this->has_many_through('User', 'user_task');
 }
 
