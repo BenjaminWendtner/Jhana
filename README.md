@@ -53,13 +53,20 @@ Here an example for **Relations**:
 ```php
 // Belongs To relation
 public function user() {
-	return User::find($this->user_id);
+	return $this->belongs_to('User');
 }
 
 // Has Many relation
-public function tasks() {
-	return Task::find_by("user_id", $this->id);
+public function users() {
+	return $this->has_many('User');
 }
+
+// Has Many through n:m table relation
+// The second parameter is the n:m tables name.
+public function posts() {
+	return $this->has_many_through('User', 'user_task');
+}
+
 ```
 
 Those relations could then be used as follows:

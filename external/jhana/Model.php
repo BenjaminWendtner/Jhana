@@ -127,7 +127,6 @@
 			return TRUE;
 		} 
 		
-		
 		/**
 		 * Deletes an object.
 		 * @return Boolean: Returns FALSE if the deletion failed.
@@ -156,6 +155,40 @@
 					$validated = $this->$method();
 
 			return $validated;
+		}
+		
+		/**
+		 * Retrieves the related object.
+		 * @param $class: The related class name.
+		 * @return Array of objects.
+		 */		
+		public function belongs_to($class) {
+			$id = lcfirst($class).'_id';
+			return $class::find($this->$id);
+		}
+		
+		/**
+		 * Retrieves the related objects.
+		 * @param $class: The related class name.
+		 * @return Array of objects.
+		 */		
+		public function has_many($class) {
+			$id = lcfirst(get_class($this)).'_id';
+			return $class::find_by([$id => $this->id]); 
+		}
+		
+		/**
+		 * Retrieves the related objects
+		 * @param $class: The related class name.
+		 * @param $table: The n:m table name.
+		 * @return Array of objects.
+		 */		
+		public function has_many_through($class, $table) {
+			$id_self = lcfirst(get_class($this)).'_id';
+			$id_other = lcfirst($class).'_id';
+			
+			$records = self::$database->select($class::$table_name, ['[>]'.$table => ['id' => $id_other]], '*', [$table.'.'.$id_self => $this->id]);
+			return $class::mapObjects($records);
 		}
 		
 		/**
