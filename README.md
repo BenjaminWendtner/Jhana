@@ -22,7 +22,10 @@ Here are some Core-Features of Jhana:
 
 
 ### Installation
-Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
+Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. 
+
+Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
+If a field references to another table, the field should be named with "[Referenced Modelname]_id". For example if a user can have multiple tasks then the "tasks" table would have a column named "user_id".
 
 ### Creating Models
 Each Model represents a table in your database. All columns are mapped automatically. A simple Model could look like this. 
