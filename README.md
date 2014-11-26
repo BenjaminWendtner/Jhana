@@ -24,6 +24,7 @@ Here are some Core-Features of Jhana:
 ### Installation
 Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. 
 Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
+If a field references to another table, the field should be named with "[Referenced Modelname]_id". For example if a user can have multiple tasks then the "tasks" table would have a column named "user_id".
 Optionally you can define the columns *created_at* and *updated_at*. These fields are then used automatically to set the dates of the entries correct.
 
 ### Creating Models
@@ -63,9 +64,9 @@ public function users() {
 	return $this->has_many('User');
 }
 
-// Has Many through n:m table relation
-// The second parameter is the n:m tables name.
-public function posts() {
+// Has Many through n:m table relation.
+// The second parameter is the n:m table name.
+public function users() {
 	return $this->has_many_through('User', 'user_task');
 }
 
