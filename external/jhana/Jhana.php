@@ -29,7 +29,7 @@
 		}
 		
 		/**
-		 * Getrs the language of the application.
+		 * Gets the language of the application.
 		 * @return String: The language in form of a string like "en" or "de".
 		 */
 		public static function get_language() {
