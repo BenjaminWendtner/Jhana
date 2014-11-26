@@ -10,7 +10,7 @@
 		 * Translates a given string using the language files 
 		 * located in config/languages/. This function does not return anything
 		 * but directly prints the result.
-		 * @param: $string: The key which is then used for finding the translation.
+		 * @param $string: The key which is then used for finding the translation.
 		 */
 		public static function t($string) {
 			if (empty($_SESSION['language']))
@@ -22,10 +22,18 @@
 		
 		/**
 		 * Sets the language of the application.
-		 * @param: $language: The language in form of a string like "en" or "de".
+		 * @param $language: The language in form of a string like "en" or "de".
 		 */
 		public static function set_language($language) {
 			$_SESSION['language'] = $language;
+		}
+		
+		/**
+		 * Getrs the language of the application.
+		 * @return String: The language in form of a string like "en" or "de".
+		 */
+		public static function get_language() {
+			return $_SESSION['language'];
 		}
 		
 		/**
@@ -52,7 +60,7 @@
 		/**
 		 * Checks if a field is an email adress.
 		 * @param $field: a string.
-		 * @return boolean.
+		 * @return Boolean.
 		 */
 		public static function validate_email($field) {
 			return preg_match('/^[_a-z0-9-äÄöÖüÜ]+(\.[_a-z0-9-äÄöÖüÜ]+)*@[a-z0-9-äÄöÖüÜ]+(\.[a-z0-9-äÄöÖüÜ]+)*(\.[a-zäÄöÖüÜ]{2,3})$/i', $field);
@@ -62,7 +70,7 @@
 		 * Checks if a field has a certain length.
 		 * @param $field: a string.
 		 * @param $pattern: an integer or a string like "[1..10]", "[..10]" or "[1..]".
-		 * @return boolean.
+		 * @return Boolean.
 		 */
 		public static function validate_length($field, $pattern) {
 			
@@ -83,7 +91,7 @@
 		/**
 		 * Checks if a field is present.
 		 * @param $field: a field of any variable type.
-		 * @return boolean.
+		 * @return Boolean.
 		 */
 		public static function validate_presence($field) {
 			return !empty($field) || $field === 0;
@@ -92,7 +100,7 @@
 		/**
 		 * Checks if a field is an integer.
 		 * @param $field: a field of any variable type.
-		 * @return boolean.
+		 * @return Boolean.
 		 */
 		public static function validate_is_integer($field) {
 			return is_int($field);
@@ -101,7 +109,7 @@
 		/**
 		 * Checks if a field is a boolean.
 		 * @param $field: a field of any variable type.
-		 * @return boolean.
+		 * @return Boolean.
 		 */
 		public static function validate_is_boolean($field) {
 			return is_bool($field);
@@ -111,7 +119,7 @@
 		 * Checks if a field is contained in an array.
 		 * @param $field: a field of any variable type.
 		 * @param $array: an array.
-		 * @return boolean.
+		 * @return Boolean.
 		 */
 		public static function validate_exists_in($field, $array) {
 			return in_array($field, $array);
