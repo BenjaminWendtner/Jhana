@@ -2,7 +2,7 @@
 
 	/** 
 	 * This is the Jhana helper.
-	 * It provides some basic functionalities like translation for exmple.
+	 * It provides basic functionality for translation, validation and so on.
 	 */
 	class Jhana {
 		

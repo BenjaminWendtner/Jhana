@@ -3,6 +3,7 @@
 	/** 
 	 * This is the model baseclass. 
 	 * It enables all models to find, count, save, update and delete data. 
+	 * Furthermore it provides methods for building relations.
 	 */
 	class Model {
 		
