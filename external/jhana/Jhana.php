@@ -48,5 +48,71 @@
 	
 	  		return $files;
 	  	}
+		
+		/**
+		 * Checks if a field is an email adress.
+		 * @param $field: a string.
+		 * @return boolean.
+		 */
+		public static function validate_email($field) {
+			return preg_match('/^[_a-z0-9-äÄöÖüÜ]+(\.[_a-z0-9-äÄöÖüÜ]+)*@[a-z0-9-äÄöÖüÜ]+(\.[a-z0-9-äÄöÖüÜ]+)*(\.[a-zäÄöÖüÜ]{2,3})$/i', $field);
+		}
+		
+		/**
+		 * Checks if a field has a certain length.
+		 * @param $field: a string.
+		 * @param $pattern: a string like "[1..10]", "[..10]" or "[1..]".
+		 * @return boolean.
+		 */
+		public static function validate_length($field, $pattern) {
+			
+			$length = strlen($field);
+			
+			if ($pattern[0] == '.')
+				return $length <= substr($pattern, 2);
+			elseif (substr($pattern, -1) == '.')
+				return $length >= substr($pattern, 0, -2);
+			else {
+				$min_max = explode("..", $pattern);
+				return $length >= $min_max[0] && $length <= $min_max[1];
+			}
+		}
+		
+		/**
+		 * Checks if a field is present.
+		 * @param $field: a field of any variable type.
+		 * @return boolean.
+		 */
+		public static function validate_presence($field) {
+			return !empty($field) || $field === 0;
+		}
+		
+		/**
+		 * Checks if a field is an integer.
+		 * @param $field: a field of any variable type.
+		 * @return boolean.
+		 */
+		public static function validate_is_integer($field) {
+			return is_int($field);
+		}
+		
+		/**
+		 * Checks if a field is a boolean.
+		 * @param $field: a field of any variable type.
+		 * @return boolean.
+		 */
+		public static function validate_is_boolean($field) {
+			return is_bool($field);
+		}
+		
+		/**
+		 * Checks if a field is contained in an array.
+		 * @param $field: a field of any variable type.
+		 * @param $array: an array.
+		 * @return boolean.
+		 */
+		public static function validate_exists_in($field, $array) {
+			return in_array($field, $array);
+		}
 	}
 ?>

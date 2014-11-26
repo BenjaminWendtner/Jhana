@@ -70,9 +70,9 @@
 		} 
 		
 		/**
-		 * Creates a new row in the database with the specified parameters.
-		 * @param $params: The params for creation.
-		 * @return Boolean: Returns FALSE if the validation failed.
+		 * The create method.
+		 * @param $params: The params for creation
+		 * @return boolean
 		 */
 		public static function create($params) {
 			
@@ -82,8 +82,12 @@
 			
 			if (!$obj->validate()) return FALSE;
 			
-			$obj->id = self::$database->insert(static::$table_name, $params);
+			$now = date("Y-m-d H:i:s");
+			$params['created_at'] = $now;
+			$params['updated_at'] = $now;
 			
+			$obj->id = self::$database->insert(static::$table_name, $params);
+
 			if (method_exists($obj, 'callback_save'))
 				$obj->callback_save();
 			
@@ -91,33 +95,16 @@
 		} 
 		
 		/**
-		 * Saves an object to the database. 
-		 * Automatically detects if the object is new or has been updated.
-		 * @return Boolean: Returns FALSE if the validation failed.
-		 */
-		public function save() {
-			
-			if (!$this->validate()) return FALSE;
-			
-			if (empty($this->id))
-				$this->id = self::$database->insert(static::$table_name, (array)$this);
-			else
-				self::$database->update(static::$table_name, (array)$this, ['id' => $this->id]);
-			
-			if (method_exists($this, 'callback_save'))
-				$this->callback_save();
-
-			return TRUE;
-		}
-
-		/**
-		 * Updates an object with the specified parameters.
-		 * @param $params: The params for updating.
-		 * @return Boolean: Returns FALSE if the validation failed.
+		 * The update method.
+		 * @param $params: The params for updating
+		 * @return boolean
 		 */
 		public function update($params) {
 			
 			if (!$this->validate() || empty($this->id)) return FALSE;
+			
+			$now = date("Y-m-d H:i:s");
+			$params['updated_at'] = $now;
 			
 			self::$database->update(static::$table_name, $params, ['id' => $this->id]);
 			
@@ -126,6 +113,31 @@
 
 			return TRUE;
 		} 
+		
+		/**
+		 * The save method
+		 * @return boolean
+		 */
+		public function save() {
+			
+			if (!$this->validate()) return FALSE;
+			
+			$now = date("Y-m-d H:i:s");
+
+			if (empty($this->id)) {
+				$this->created_at = $now;
+				$this->updated_at = $now;
+				$this->id = self::$database->insert(static::$table_name, (array)$this);
+			} else {
+				$this->updated_at = $now;
+				self::$database->update(static::$table_name, (array)$this, ['id' => $this->id]);
+			}
+			
+			if (method_exists($this, 'callback_save'))
+				$this->callback_save();
+
+			return TRUE;
+		}
 		
 		/**
 		 * Deletes an object.
@@ -162,8 +174,8 @@
 		 * @param $class: The related class name.
 		 * @return Array of objects.
 		 */		
-		public function belongs_to($class) {
-			$id = lcfirst($class).'_id';
+		public function belongs_to($class, $column='') {
+			$id = $column == '' ? lcfirst($class).'_id' : $column;
 			return $class::find($this->$id);
 		}
 		
@@ -172,8 +184,8 @@
 		 * @param $class: The related class name.
 		 * @return Array of objects.
 		 */		
-		public function has_many($class) {
-			$id = lcfirst(get_class($this)).'_id';
+		public function has_many($class, $column='') {
+			$id = $column == '' ? lcfirst(get_class($this)).'_id' : $column;
 			return $class::find_by([$id => $this->id]); 
 		}
 		

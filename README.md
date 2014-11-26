@@ -22,7 +22,9 @@ Here are some Core-Features of Jhana:
 
 
 ### Installation
-Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
+Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. 
+Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
+Optionally you can define the columns *created_at* and *updated_at*. These fields are then used automatically to set the dates of the entries correct.
 
 ### Creating Models
 Each Model represents a table in your database. All columns are mapped automatically. A simple Model could look like this. 
@@ -68,19 +70,34 @@ public function posts() {
 }
 
 ```
-
+For *belongs_to* and *has_many* there is also an optional parameter where a reference column name can be defined.
 Those relations could then be used as follows:
 ```php
 $user_tasks = $user->tasks();
 ```
 
 **Validations** are executed automatically if a model gets saved. The Validation functionname has to begin with "validate_". The return value has to be boolean.
+Jhana offers a bunch of useful validation methods: *validate_email, validate_length, validate_presence, validate_is_integer, validate_is_boolean, validate_exists_in*.
+Here are some examples on how to use them:
 
 ```php
+public function validate_email() {
+	return Jhana::validate_email($this->email);
+}
+
+public function validate_name() {
+	return Jhana::validate_presence($this->name);
+}
+
 public function validate_password() {
-	return (strlen($this->password) >= 1 && strlen($this->password) <= 50);
+	return Jhana::validate_length($this->password, '1..30');
+}
+
+public function validate_type() {
+	return Jhana::validate_exists_in($this->type, ['admin', 'user']);
 }
 ```
+
 
 **Callbacks** can be usefull when it comes to preprocessing or postprocessing data. Currently Jhana provides three  types of callbacks: *callback_validate, callback_save, callback_delete*
 ```php
