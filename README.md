@@ -23,8 +23,10 @@ Here are some Core-Features of Jhana:
 
 ### Installation
 Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. 
-Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
-If a field references to another table, the field should be named with "[Referenced Modelname]_id". For example if a user can have multiple tasks then the "tasks" table would have a column named "user_id".
+
+### Database
+If you want to use a database there are a few important things. Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
+If a field references to another table, the field should be named with "[Referenced Modelname]_id". For example if a user can have multiple tasks then the "tasks" table would have a column named "user_id". This is only a convention but enables Jhana to handle the relations for you.
 Optionally you can define the columns *created_at* and *updated_at*. These fields are then used automatically to set the dates of the entries correct.
 
 ### Creating Models
@@ -184,7 +186,7 @@ An important file is the *views/layout/layout.php*. Every view is rendered into 
 The assets are devided into three parts: JavaScript, CSS and Images. Feel free to add any subfolders to the JS or the CSS folders. All these files will be automatically loaded recursively anyways. Jhana imports the Bootstrap-Frontend Framework by default. For Stylesheets you could use CSS and LESS. Also Pjax is used to provide the fastest possible site-loading. For all those things, you have to configure nothing, just enjoy the magic ;-)
 
 ### Helpers
-You can use the Helpers-Folder to create your own Helpers. Helper methods can be executed everywhere but we would recommend to use them in views.
+You can use the Helpers-Folder to create your own Helpers. Helper methods can be executed everywhere, so it's up to you when and where to use them.
 
 ### Localization
 Jhana also supports localization. Put your language files into *config/languages/* folder and name them appropriately ("en.php", "de.php" and so on).
