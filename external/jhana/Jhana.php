@@ -61,14 +61,16 @@
 		/**
 		 * Checks if a field has a certain length.
 		 * @param $field: a string.
-		 * @param $pattern: a string like "[1..10]", "[..10]" or "[1..]".
+		 * @param $pattern: an integer or a string like "[1..10]", "[..10]" or "[1..]".
 		 * @return boolean.
 		 */
 		public static function validate_length($field, $pattern) {
 			
 			$length = strlen($field);
 			
-			if ($pattern[0] == '.')
+			if (is_int($pattern))
+				return $length == $pattern;
+			elseif ($pattern[0] == '.')
 				return $length <= substr($pattern, 2);
 			elseif (substr($pattern, -1) == '.')
 				return $length >= substr($pattern, 0, -2);
