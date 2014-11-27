@@ -26,10 +26,15 @@
 	// Extract action name
 	$_GET['action'] = explode('#', $match['target'])[1];
 	
-	// If controller or action is undefined, response with a 404 Error
+	// If controller or action is undefined, response with Welcome page or 404 Error
 	if (empty($_GET['controller']) || empty($_GET['action'])) {
-		header('HTTP/1.0 404 Not Found');
-		require_once 'views/errors/404.php';
+		if (BASE_PATH == $_SERVER['REQUEST_URI'])
+			require_once 'external/jhana/Welcome.php';
+		else {
+			header('HTTP/1.0 404 Not Found');
+			require_once 'views/errors/404.php';
+		}
+		
 		exit;
 	}
 
@@ -38,7 +43,7 @@
 	
 	// Require all models
 	require_once 'external/jhana/Model.php';
-	Model::set_database(new medoo());
+	Model::set_database();
 	foreach(glob('models/*.php') as $model)
 	    require_once $model;
 

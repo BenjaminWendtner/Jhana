@@ -10,9 +10,17 @@
 		protected static $database;
 		
 		
-		public static function set_database($database) {
-	       self::$database = $database;
+		public static function set_database() {
+	       self::$database = new medoo();
 	   	}
+		
+		/**
+		 * Contructor enables to contruct with attributes
+		 */
+		public function __construct($params=[]) {
+			$this->set_attributes($params);
+		}
+		
 				
 		/**
 		 * Returns all rows of the defined table.
@@ -70,75 +78,64 @@
 			return self::mapObjects($records);
 		} 
 		
+
 		/**
 		 * The create method.
-		 * @param $params: The params for creation
-		 * @return boolean
+		 * @param $params: The params for creation.
+		 * @return Object.
 		 */
 		public static function create($params) {
 			
-			$obj = new static;
-			foreach ($params as $key => $value)
-				$obj->$key = $value;
-			
-			if (!$obj->validate()) return FALSE;
-			
-			$now = date("Y-m-d H:i:s");
-			$params['created_at'] = $now;
-			$params['updated_at'] = $now;
-			
-			$obj->id = self::$database->insert(static::$table_name, $params);
+			// Ignore the id parameter
+			unset($params['id']);
+			$obj = new static($params);
 
-			if (method_exists($obj, 'callback_save'))
-				$obj->callback_save();
-			
-			return $obj;
+			return $obj->save();
 		} 
 		
 		/**
 		 * The update method.
-		 * @param $params: The params for updating
-		 * @return boolean
+		 * @param $params: The params for updating.
+		 * @return Object.
 		 */
 		public function update($params) {
 			
-			if (!$this->validate() || empty($this->id)) return FALSE;
+			// Ignore the id parameter
+			unset($params['id']);
+			$this->set_attributes($params);
 			
-			$now = date("Y-m-d H:i:s");
-			$params['updated_at'] = $now;
-			
-			self::$database->update(static::$table_name, $params, ['id' => $this->id]);
-			
-			if (method_exists($this, 'callback_save'))
-				$this->callback_save();
-
-			return TRUE;
+			return $this->save();
 		} 
-		
+
+
 		/**
-		 * The save method
-		 * @return boolean
+		 * Saves a model into the database. 
+		 * This method is also used by update and create.
+		 * All callbacks are fired in this method.
+		 * @return Object.
 		 */
 		public function save() {
 			
+			$this->callback('callback_before_validate');
 			if (!$this->validate()) return FALSE;
 			
-			$now = date("Y-m-d H:i:s");
-
-			if (empty($this->id)) {
-				$this->created_at = $now;
-				$this->updated_at = $now;
-				$this->id = self::$database->insert(static::$table_name, (array)$this);
-			} else {
-				$this->updated_at = $now;
-				self::$database->update(static::$table_name, (array)$this, ['id' => $this->id]);
-			}
+			$this->callback('callback_before_save');
+			$this->set_timestamps();
 			
-			if (method_exists($this, 'callback_save'))
-				$this->callback_save();
-
-			return TRUE;
+			if (empty($this->id)) {
+				$this->callback('callback_before_create');
+				$this->id = self::$database->insert(static::$table_name, (array)$this);
+				$this->callback('callback_after_create');
+			} else {
+				$this->callback('callback_before_update');
+				self::$database->update(static::$table_name, (array)$this, ['id' => $this->id]);
+				$this->callback('callback_after_update');
+			}
+			$this->callback('callback_after_save');
+			
+			return $this;
 		}
+
 		
 		/**
 		 * Deletes an object.
@@ -158,15 +155,12 @@
 		 */		
 		public function validate() {
 				
-			if (method_exists($this, 'callback_validate'))
-				$this->callback_validate();	
-			
 			$validated = TRUE;
 			
 			foreach(get_class_methods(get_called_class()) as $method)
 				if (preg_match('/^validate_/', $method))
 					$validated = $this->$method();
-
+			
 			return $validated;
 		}
 		
@@ -175,9 +169,9 @@
 		 * @param $class: The related class name.
 		 * @return Array of objects.
 		 */		
-		public function belongs_to($class, $column='') {
-			$id = $column == '' ? lcfirst($class).'_id' : $column;
-			return $class::find($this->$id);
+		public function belongs_to($model, $foreign_key='') {
+			$id = $foreign_key == '' ? lcfirst($model).'_id' : $foreign_key;
+			return $model::find($this->$id);
 		}
 		
 		/**
@@ -185,9 +179,9 @@
 		 * @param $class: The related class name.
 		 * @return Array of objects.
 		 */		
-		public function has_many($class, $column='') {
-			$id = $column == '' ? lcfirst(get_class($this)).'_id' : $column;
-			return $class::find_by([$id => $this->id]); 
+		public function has_many($model, $foreign_key='') {
+			$id = $foreign_key == '' ? lcfirst(get_class($this)).'_id' : $foreign_key;
+			return $model::find_by([$id => $this->id]); 
 		}
 		
 		/**
@@ -196,12 +190,41 @@
 		 * @param $table: The n:m table name.
 		 * @return Array of objects.
 		 */		
-		public function has_many_through($class, $table) {
+		public function has_many_through($model, $table) {
 			$id_self = lcfirst(get_class($this)).'_id';
-			$id_other = lcfirst($class).'_id';
+			$id_other = lcfirst($model).'_id';
 			
-			$records = self::$database->select($class::$table_name, ['[>]'.$table => ['id' => $id_other]], '*', [$table.'.'.$id_self => $this->id]);
-			return $class::mapObjects($records);
+			$records = self::$database->select($model::$table_name, ['[>]'.$table => ['id' => $id_other]], '*', [$table.'.'.$id_self => $this->id]);
+			return $model::mapObjects($records);
+		}
+		
+		/**
+		 * Sets this object attributes to an array of parameters.
+		 * @param $params: The attribute parameters.
+		 */
+		private function set_attributes($params) {
+			foreach ($params as $key => $value)
+				$this->$key = $value;
+		}
+		
+		/**
+		 * Sets this object timestamps.
+		 */
+		private function set_timestamps() {
+			$now = date("Y-m-d H:i:s");
+			$this->updated_at = $now;
+			
+			if (empty($this->id))
+				$this->created_at = $now;
+		}
+		
+		/**
+		 * This method looks if a callback exists and executes it.
+		 * @param $name: The name of the callback.
+		 */	
+		private function callback($name) {
+			if (method_exists($this, $name))
+				$this->$name();	
 		}
 		
 		/**
@@ -211,7 +234,7 @@
 		private static function mapObjects($records) {
 			$result = array();
 			foreach($records as $record) {
-				$obj = new static;
+				$obj = new static();
 				foreach($record as $key => $value)
 					$obj->$key = $value;
 

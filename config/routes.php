@@ -6,7 +6,7 @@
 	 * Examples below.
 	 */
 
-	//$router->map('GET', '', 'tasks#index');
-	//$router->map('GET', 'task/[i:id]', 'task#show', 'show_task_path');
+	//$router->map('GET', '', 'user#index');
+	//$router->map('GET', 'user/[i:id]', 'task#show', 'show_userpath');
 	
 ?>

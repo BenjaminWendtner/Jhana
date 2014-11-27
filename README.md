@@ -42,13 +42,23 @@ class User extends Model {
 An object of this class would already has all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, find_by, sql, create, update, save, delete, validate.*
 Here is an example on how you could use this:
 ```php
+// Use constructor to pass attributes
+$user = new User(['name' => 'Homer Simpson']);
+$user->email = 'homer@springfield.com';
+$user->save();
+
+// Use the find method to get a single object.
+// The parameter is always the id of the object.
 $user = User::find(23);
 $user->name = 'Homer Simpson';
 $user->save();
 
-$user = User::find_by(['name' => 'Homer Simpson'])[0];
+// Use the find_by method to get an array of objects.
+// Also ORDER, LIMIT and so on are available.
+$user = User::find_by(['name' => 'Homer Simpson', 'ORDER' => 'id DESC'])[0];
 $user->update(['name' => 'Bart Simpson']);
 
+// Use the create method
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
 ```
 For more details (ORDER, LIMIT ...), please have look at http://medoo.in/api/where until we can provide you a better documentation.
@@ -102,11 +112,20 @@ public function validate_type() {
 ```
 
 
-**Callbacks** can be usefull when it comes to preprocessing or postprocessing data. Currently Jhana provides three  types of callbacks: *callback_validate, callback_save, callback_delete*
+**Callbacks** can be usefull when it comes to preprocessing or postprocessing data. 
+They are executed when using one of the functions *save, create, update* or *delete*.
+Currently Jhana provides types of callbacks: *callback_before_validation, callback_before_save, callback_before_create, callback_before_update, callback_after_create, callback_after_update, callback_after_save, callback_before_delete*
 ```php
-protected function callback_delete() {
+// Example: Set a default password before validation
+protected function callback_before_validate() {
   if ($this->password == '')
-	  $this->password = 'default';
+	  $this->password = 'default password';
+}
+
+// Example: Delete all associated models before deletion.
+protected function callback_before_delete() {
+  foreach ($this->users() as $user)
+  	$user->delete();
 }
 ```
 
@@ -161,10 +180,11 @@ We pass the *&params* to each filter, so that we can modify all request paramete
 
 ### Map routes
 Since we have our Controller Actions, now is the time to route the URLs. Jhana uses the AltoRouter-PHP Plugin.
+As long as you have not defined a root URL, Jhana will display the Welcome page.
 In *config/routes.php* write something like this:
 
 ```php
-$router->map('GET', 'users', 'user#index');
+$router->map('GET', '', 'user#index');
 $router->map('GET', 'user/[i:id]', 'user#show');
 ```
 
