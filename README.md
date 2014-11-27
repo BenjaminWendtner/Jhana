@@ -67,18 +67,18 @@ Jhana also provides more advanced features like Relations, Validations and Callb
 Here an example for **Relations**:
 ```php
 // Belongs To relation
-public function user() {
+function user() {
 	return $this->belongs_to('User');
 }
 
 // Has Many relation
-public function users() {
+function users() {
 	return $this->has_many('User');
 }
 
 // Has Many through n:m table relation.
 // The second parameter is the n:m table name.
-public function users() {
+function users() {
 	return $this->has_many_through('User', 'user_task');
 }
 
@@ -94,19 +94,19 @@ Jhana offers a bunch of useful validation methods: *validate_email, validate_len
 Here are some examples on how to use them:
 
 ```php
-public function validate_name() {
+function validate_name() {
 	return Jhana::validate_presence($this->name);
 }
 
-public function validate_email() {
+function validate_email() {
 	return Jhana::validate_email($this->email);
 }
 
-public function validate_password() {
+function validate_password() {
 	return Jhana::validate_length($this->password, '1..30');
 }
 
-public function validate_type() {
+function validate_type() {
 	return Jhana::validate_exists_in($this->type, ['admin', 'user']);
 }
 ```
@@ -117,13 +117,13 @@ They are executed when using one of the functions *save, create, update* or *del
 Currently Jhana currently provides the following types of callbacks: *callback_before_validation, callback_before_save, callback_before_create, callback_before_update, callback_after_create, callback_after_update, callback_after_save, callback_before_delete*.
 ```php
 // Example: Set a default password before validation
-protected function callback_before_validate() {
+function callback_before_validate() {
   if ($this->password == '')
 	  $this->password = 'default password';
 }
 
 // Example: Delete all associated models before deletion.
-protected function callback_before_delete() {
+function callback_before_delete() {
   foreach ($this->users() as $user)
   	$user->delete();
 }
