@@ -90,16 +90,17 @@ $user_tasks = $user->tasks();
 ```
 
 **Validations** are executed automatically if a model gets saved. The Validation functionname has to begin with "validate_". The return value has to be boolean.
-Jhana offers a bunch of useful validation methods: *validate_email, validate_length, validate_presence, validate_is_integer, validate_is_boolean, validate_exists_in*.
+Jhana offers a bunch of useful validation methods: *validate_email, validate_uniqueness, validate_length, validate_presence, validate_is_integer, validate_is_boolean, validate_exists_in*.
 Here are some examples on how to use them:
 
 ```php
+
 public function validate_email() {
-	return Jhana::validate_email($this->email);
+	return Jhana::validate_email($this->email) && Jhana::validate_uniqueness('email', $this->email);
 }
 
-public function validate_name() {
-	return Jhana::validate_presence($this->name);
+public function validate_company() {
+	return Jhana::validate_presence($this->company);
 }
 
 public function validate_password() {
@@ -114,7 +115,7 @@ public function validate_type() {
 
 **Callbacks** can be usefull when it comes to preprocessing or postprocessing data. 
 They are executed when using one of the functions *save, create, update* or *delete*.
-Currently Jhana provides types of callbacks: *callback_before_validation, callback_before_save, callback_before_create, callback_before_update, callback_after_create, callback_after_update, callback_after_save, callback_before_delete*
+Currently Jhana currently provides the following types of callbacks: *callback_before_validation, callback_before_save, callback_before_create, callback_before_update, callback_after_create, callback_after_update, callback_after_save, callback_before_delete*.
 ```php
 // Example: Set a default password before validation
 protected function callback_before_validate() {

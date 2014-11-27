@@ -58,6 +58,16 @@
 	  	}
 		
 		/**
+		 * Checks if a field is is already in the database.
+		 * @param $field: a field of any variable type.
+		 * @return Boolean.
+		 */
+		public static function validate_uniqueness($field, $value) {
+			$model = debug_backtrace()[1]['class'];
+			return $model::count([$field => $value]) == 0;
+		}
+		
+		/**
 		 * Checks if a field is an email adress.
 		 * @param $field: a string.
 		 * @return Boolean.
