@@ -94,13 +94,13 @@ Jhana offers a bunch of useful validation methods: *validate_email, validate_uni
 Here are some examples on how to use them:
 
 ```php
-
-public function validate_email() {
-	return Jhana::validate_email($this->email) && Jhana::validate_uniqueness('email', $this->email);
+public function validate_name() {
+	return Jhana::validate_presence($this->name);
 }
 
-public function validate_company() {
-	return Jhana::validate_presence($this->company);
+public function validate_email() {
+	return Jhana::validate_email($this->email) && 
+		   Jhana::validate_uniqueness('email', $this->email);
 }
 
 public function validate_password() {
