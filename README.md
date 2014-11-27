@@ -90,7 +90,7 @@ $user_tasks = $user->tasks();
 ```
 
 **Validations** are executed automatically if a model gets saved. The Validation functionname has to begin with "validate_". The return value has to be boolean.
-Jhana offers a bunch of useful validation methods: *validate_email, validate_uniqueness, validate_length, validate_presence, validate_is_integer, validate_is_boolean, validate_exists_in*.
+Jhana offers a bunch of useful validation methods: *validate_email, validate_length, validate_presence, validate_is_integer, validate_is_boolean, validate_exists_in*.
 Here are some examples on how to use them:
 
 ```php
@@ -99,8 +99,7 @@ public function validate_name() {
 }
 
 public function validate_email() {
-	return Jhana::validate_email($this->email) && 
-		   Jhana::validate_uniqueness('email', $this->email);
+	return Jhana::validate_email($this->email);
 }
 
 public function validate_password() {
