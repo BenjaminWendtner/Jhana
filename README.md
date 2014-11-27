@@ -60,6 +60,9 @@ $user->update(['name' => 'Bart Simpson']);
 
 // Use the create method
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
+
+// Use direct SQL with prepared statement support
+$user = User::sql('SELECT * FROM users WHERE name = ?, ['Homer Simpson'])[0];
 ```
 For more details (ORDER, LIMIT ...), please have look at http://medoo.in/api/where until we can provide you a better documentation.
 

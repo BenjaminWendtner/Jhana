@@ -68,17 +68,10 @@
 		 * @return Array of objects.
 		 */
 		public static function sql($query, $params=[]) {
-			
-			// Prepare statement
-			if (isset($params))
-				foreach ($params as $param)
-					$query = preg_replace('/\?/', $param, $query, 1);
-			
-			$records = self::$database->query($query);
+			$records = self::$database->query($query, $params);			
 			return self::mapObjects($records);
 		} 
 		
-
 		/**
 		 * The create method.
 		 * @param $params: The params for creation.
@@ -136,16 +129,12 @@
 			return $this;
 		}
 
-		
 		/**
 		 * Deletes an object.
 		 * @return Boolean: Returns FALSE if the deletion failed.
 		 */
 		public function delete() {
-			
-			if (method_exists($this, 'callback_delete'))
-				$this->callback_delete();
-			
+			$this->callback('before_delete');
 			return self::$database->delete(static::$table_name, ['id' => $this->id]);
 		}
 		
@@ -154,9 +143,7 @@
 		 * @return Boolean: Returns FALSE if the validation failed.
 		 */		
 		public function validate() {
-				
 			$validated = TRUE;
-			
 			foreach(get_class_methods(get_called_class()) as $method)
 				if (preg_match('/^validate_/', $method))
 					$validated = $this->$method();
@@ -166,27 +153,29 @@
 		
 		/**
 		 * Retrieves the related object.
-		 * @param $class: The related class name.
+		 * @param $model: The related model name.
+		 * @param $foreign: The related foreign key.
 		 * @return Array of objects.
 		 */		
-		public function belongs_to($model, $foreign_key='') {
-			$id = $foreign_key == '' ? lcfirst($model).'_id' : $foreign_key;
+		public function belongs_to($model, $foreign='') {
+			$id = $foreign == '' ? lcfirst($model).'_id' : $foreign;
 			return $model::find($this->$id);
 		}
 		
 		/**
 		 * Retrieves the related objects.
-		 * @param $class: The related class name.
+		 * @param $model: The related model name.
+		 * @param $foreign: The related foreign key.
 		 * @return Array of objects.
 		 */		
-		public function has_many($model, $foreign_key='') {
-			$id = $foreign_key == '' ? lcfirst(get_class($this)).'_id' : $foreign_key;
+		public function has_many($model, $foreign='') {
+			$id = $foreign == '' ? lcfirst(get_class($this)).'_id' : $foreign;
 			return $model::find_by([$id => $this->id]); 
 		}
 		
 		/**
 		 * Retrieves the related objects
-		 * @param $class: The related class name.
+		 * @param $model: The related model name.
 		 * @param $table: The n:m table name.
 		 * @return Array of objects.
 		 */		
