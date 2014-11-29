@@ -28,6 +28,11 @@
 			
 			<br /><br />
 					
+			First of all please make shure, that Jhana has<br />
+			writing access to the <i>/external/less/cache</i> directory.
+
+			<br /><br />
+					
 			This page will disappear as soon as you define<br />
 			the root url in config/routes.php. Example: <br />
 			<b>$router->map('GET', '', 'user#index');</b>

@@ -39,7 +39,7 @@ class User extends Model {
 }
 ```
 
-An object of this class would already has all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, find_by, sql, create, update, save, delete, validate.*
+An object of this class would already have all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, find_by, sql, create, update, save, delete, validate.*
 Here is an example on how you could use this:
 ```php
 // Use constructor to pass attributes
@@ -160,8 +160,9 @@ Controllers also provide filtering. Filters are always executed BEFORE an action
 class UserController extends ApplicationController {
 
   	// The filter array maps filters to actions
+  	// If no actions are specified, the filter applies to all actions
 	protected static $filters = [
-		'filter_test' => ['show']
+		'filter_for_all', 'filter_test' => ['show']
 	];
 		
 	// An ordinary action

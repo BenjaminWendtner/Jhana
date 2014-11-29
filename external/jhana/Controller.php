@@ -19,11 +19,15 @@
 			
 			if (isset(static::$filters) == FALSE) return;
 			
-			foreach (static::$filters as $filter_name => $actions) {
-				foreach ($actions as $action) {
-					if ($_GET['action'] == $action)
-						static::$filter_name($params);
-				}
+			foreach (static::$filters as $key => $value) {
+				
+				// If filter affects all actions
+				if (empty($key))
+					static::$value($params);
+				
+				// If filter affects only certain actions
+				elseif (in_array($_GET['action'], $value))
+						static::$key($params);
 			}
 		}
 		
