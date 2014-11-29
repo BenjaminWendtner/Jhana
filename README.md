@@ -223,6 +223,5 @@ There is not much Jhana can do for you if you want to use cronjobs. But here is 
 You could define another constant in *config/config.php* and name it CRONJOB_SECRET with a random string. When you are setting up your cronjobs
 you can pass this random string as parameter in the URL. Next you could setup a CronjobController with some actions and a filter which checks wether the cronjob secret
 passed in the URL matches the CRONJOB_SECRET you defined in your config. The controller actions can then simply handle your cronjob logic.
-Then in *config/routes.php* you c
 
 
