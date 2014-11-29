@@ -7,6 +7,6 @@
 	 */
 
 	//$router->map('GET', '', 'user#index');
-	//$router->map('GET', 'user/[i:id]', 'task#show', 'show_userpath');
+	//$router->map('GET', 'user/[i:id]', 'user#show', 'show_user_path');
 	
 ?>

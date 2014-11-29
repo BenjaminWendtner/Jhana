@@ -22,7 +22,8 @@ Here are some Core-Features of Jhana:
 
 
 ### Installation
-Installation is simple. Just extract the framework folder into your webdirectory. Then you can open */config/config.php* and setup your database connection. 
+Installation is simple. Just extract the framework folder into your webdirectory. That's it!
+If you want to use a database you can open */config/config.php* and setup your database connection. 
 
 ### Database
 If you want to use a database there are a few important things. Each table in your database should have an "id" autoincrement column. Jhana uses this for Object Realational Mapping.
@@ -162,7 +163,7 @@ class UserController extends ApplicationController {
   	// The filter array maps filters to actions
   	// If no actions are specified, the filter applies to all actions
 	protected static $filters = [
-		'filter_for_all', 'filter_test' => ['show']
+		'filter_all', 'filter_test' => ['show']
 	];
 		
 	// An ordinary action
@@ -173,7 +174,6 @@ class UserController extends ApplicationController {
 
   	// This filter function is executed before show() is executed
 	protected static function filter_test(&params) {
-		// Could do everything here...
 		if (empty($_SESSION["user_id"]))
 				self::redirect('http://www.google.at');
 	}
@@ -216,4 +216,12 @@ You can use the Helpers-Folder to create your own Helpers. Helpers are loaded au
 Jhana also supports localization. Put your language files into *config/languages/* folder and name them appropriately ("en.php", "de.php" and so on).
 Use the function ```Jhana::set_language('en');``` to set the session to this language and the function ```Jhana::get_language();``` to get the current language. 
 Then use ```Jhana::t(...);``` to print your translations. You can set your default language in *config/config.php*
+
+### Cronjobs
+There is not much Jhana can do for you if you want to use cronjobs. But here is the approach we would recommend:
+You could define another constant in *config/config.php* and name it CRONJOB_SECRET with a random string. When you are setting up your cronjobs
+you can pass this random string as parameter in the URL. Next you could setup a CronjobController with some actions and a filter which checks wether the cronjob secret
+passed in the URL matches the CRONJOB_SECRET you defined in your config. The controller actions can then simply handle your cronjob logic.
+Then in *config/routes.php* you c
+
 

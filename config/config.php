@@ -2,10 +2,7 @@
 	
 	// Application title
 	define('APP_TITLE', 	 'My ToDo List');
-	
-	// Application base path, if you are running this application from a sub directory
-	define('BASE_PATH',		 '/example/');
-	
+
 	// DB Configuration
 	/*
 	 	define('DB_USER',		 '...');

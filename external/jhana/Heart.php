@@ -15,7 +15,7 @@
 	// Handle routing
 	require_once 'external/altorouter/AltoRouter.php';
 	$router = new AltoRouter();
-	$router->setBasePath(BASE_PATH);
+	$router->setBasePath(substr($_SERVER['SCRIPT_NAME'], 0, -9));
 	require_once 'config/routes.php';
 	$match = $router->match();
 
@@ -37,7 +37,7 @@
 		
 		exit;
 	}
-
+	
 	// Require medoo
 	require_once 'external/medoo/medoo.php';
 	
