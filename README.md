@@ -173,9 +173,10 @@ class UserController extends ApplicationController {
 	}
 
   	// This filter function is executed before show() is executed
+  	// The Jhana::route helper generates an URL for path-names defined in routes.php
 	protected static function filter_test(&params) {
 		if (empty($_SESSION["user_id"]))
-				self::redirect('http://www.google.at');
+				self::redirect(Jhana::route("root_path"));
 	}
 }
 ```

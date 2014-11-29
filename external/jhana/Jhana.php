@@ -6,6 +6,16 @@
 	 */
 	class Jhana {
 		
+		private static $router;
+		
+		/**
+		 * Sets the router for this helper.
+		 * @param $router: The router generated in Heart.php.
+		 */
+		public static function set_router($router) {
+			self::$router = $router;
+		}
+		
 		/**
 		 * Translates a given string using the language files 
 		 * located in config/languages/. This function does not return anything
@@ -44,18 +54,14 @@
 		}
 		
 		/**
-		 * Iterates through a given folder recursively. 
-		 * This is used for example to find all assets in all subfolders.
-		 * @param $pattern: The folder path.
-		 * @return Array of files.
+		 * Generates URL.
+		 * @param $route_name: An abitrary named route from config/routes.php.
+		 * @param $params: If route needs parameters.
+		 * @return string: The URL.
 		 */
-		public static function recursive_glob($pattern, $flags = 0) {
-	    	$files = glob($pattern, $flags);
-	     	foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)
-				$files = array_merge($files, self::recursive_glob($dir.'/'.basename($pattern), $flags));
-	
-	  		return $files;
-	  	}
+		public static function route($route_name, $params=[]) {
+			return self::$router->generate($route_name, $params);
+		}
 		
 		/**
 		 * Checks if a field is an email adress.
@@ -124,5 +130,19 @@
 		public static function validate_exists_in($field, $array) {
 			return in_array($field, $array);
 		}
+		
+		/**
+		 * Iterates through a given folder recursively. 
+		 * This is used for example to find all assets in all subfolders.
+		 * @param $pattern: The folder path.
+		 * @return Array of files.
+		 */
+		public static function recursive_glob($pattern, $flags = 0) {
+	    	$files = glob($pattern, $flags);
+	     	foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)
+				$files = array_merge($files, self::recursive_glob($dir.'/'.basename($pattern), $flags));
+	
+	  		return $files;
+	  	}
 	}
 ?>

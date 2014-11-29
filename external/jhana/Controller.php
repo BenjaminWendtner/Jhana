@@ -5,13 +5,7 @@
 	 * It provides filtering, rendering and redirecting
 	 */
 	class Controller {
-		
-		protected static $router;
 
-	   	public static function set_router($router) {
-	       self::$router = $router;
-	   	}
-		
 		/**
 		 * Calls all filters which are defined in the controllers.
 		 */	

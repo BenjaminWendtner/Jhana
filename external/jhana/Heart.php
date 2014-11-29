@@ -18,7 +18,13 @@
 	$router->setBasePath(substr($_SERVER['SCRIPT_NAME'], 0, -9));
 	require_once 'config/routes.php';
 	$match = $router->match();
-
+	
+	// Require all helpers
+	require_once 'external/jhana/Jhana.php';
+	Jhana::set_router($router);
+	foreach(glob('helpers/*.php') as $helper)
+	    require_once $helper;
+	
 	// Extract controller name
 	$_GET['controller'] = explode('#', $match['target'])[0];
 	$controller_name = ucfirst($_GET['controller']).'Controller';
@@ -32,7 +38,8 @@
 			require_once 'external/jhana/Welcome.php';
 		else {
 			header('HTTP/1.0 404 Not Found');
-			require_once 'views/errors/404.php';
+			$view = 'views/errors/404.php';
+			require_once 'views/layouts/main.php';
 		}
 		
 		exit;
@@ -51,14 +58,6 @@
 	require_once 'external/jhana/Controller.php';
 	require_once 'controllers/ApplicationController.php';
 	require_once 'controllers/'.$controller_name.'.php';
-		
-	// Require all helpers
-	require_once 'external/jhana/Jhana.php';
-	foreach(glob('helpers/*.php') as $helper)
-	    require_once $helper;
-	
-	// Set router for controller (inside actions we want to have access to all routes)
-	$controller_name::set_router($router);
 	
 	// Execute filters
 	$controller_name::filter($match['params']);
