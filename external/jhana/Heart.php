@@ -11,11 +11,14 @@
 	
 	// Require config
 	require_once 'config/config.php';
+	
+	// Denfine Base Path
+	define('BASE_PATH', substr($_SERVER['SCRIPT_NAME'], 0, -9));
 
 	// Handle routing
 	require_once 'external/altorouter/AltoRouter.php';
 	$router = new AltoRouter();
-	$router->setBasePath(substr($_SERVER['SCRIPT_NAME'], 0, -9));
+	$router->setBasePath(BASE_PATH);
 	require_once 'config/routes.php';
 	$match = $router->match();
 	
