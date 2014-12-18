@@ -62,7 +62,7 @@ User::find([1,2,3])->update(['name' => 'Homer Simpson']);
 $count = User::all()->where('firstname = ? AND lastname = ?', ['Homer', 'Simpson'])->count();
 
 // Use get(), count(), update() or delete() at the end of your query
-$count = User::all()->where('firstname = ?', ['Homer', 'Simpson'])->first()->delete();
+$count = User::all()->where('firstname = ?', ['Homer'])->first()->delete();
 
 // Use the create method
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
