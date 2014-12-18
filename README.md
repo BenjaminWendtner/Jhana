@@ -62,7 +62,7 @@ User::find([1,2,3])->update(['name' => 'Homer Simpson']);
 $count = User::all()->where('firstname = ? AND lastname = ?', ['Homer', 'Simpson'])->count();
 
 // Use get(), count(), update() or delete() at the end of your query
-$count = User::all()->where('firstname = ?', ['Homer'])->first()->delete();
+User::all()->where('firstname = ?', ['Homer'])->first()->delete();
 
 // Use the create method
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
@@ -70,7 +70,7 @@ $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.c
 // Use LIMIT and OFFSET
 User::all()->limit(3)->offset(3)->delete();
 ```
-
+There is much more functionality to this which we will document soon!
 Jhana also provides more advanced features like Relations, Validations and Callbacks.
 Here an example for **Relations**:
 ```php
