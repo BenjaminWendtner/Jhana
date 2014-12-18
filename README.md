@@ -58,10 +58,11 @@ $user->save();
 // Parameters for find can be a single id or an array of ids
 User::find([1,2,3])->update(['name' => 'Homer Simpson']);
 
-
 // Use the where method to create a custom WHERE clause
-$user = User::all()->where('firstname = ? AND lastname = ?', ['Homer', 'Simpson'])->first()->count();
-$user->update(['name' => 'Bart Simpson']);
+$count = User::all()->where('firstname = ? AND lastname = ?', ['Homer', 'Simpson'])->count();
+
+// Use get(), count(), update() or delete() at the end of your query
+$count = User::all()->where('firstname = ?', ['Homer', 'Simpson'])->first()->delete();
 
 // Use the create method
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
