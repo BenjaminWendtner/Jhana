@@ -48,9 +48,6 @@
 		exit;
 	}
 	
-	// Require medoo
-	require_once 'external/medoo/medoo.php';
-	
 	// Require all models
 	require_once 'external/jhana/Model.php';
 	Model::set_database();

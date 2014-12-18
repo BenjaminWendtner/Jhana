@@ -11,6 +11,7 @@ Here are some Core-Features of Jhana:
 
 + Lightweight
 + MVC-Structure
++ Query builder
 + Easy to install (Drag & Drop the folder)
 + Completely self-contained
 + Includes Bootstrap by default
@@ -30,7 +31,7 @@ If you want to use a database there are a few important things. Each table in yo
 If a field references to another table, the field should be named with "[Referenced Modelname]_id". For example if a user can have multiple tasks then the "tasks" table would have a column named "user_id". This is only a convention but enables Jhana to handle the relations for you.
 Optionally you can define the columns *created_at* and *updated_at*. These fields are then used automatically to set the dates of the entries correct.
 
-### Creating Models
+### Models
 Each Model represents a table in your database. All columns are mapped automatically. A simple Model could look like this. 
 ```php
 class User extends Model {
@@ -40,32 +41,34 @@ class User extends Model {
 }
 ```
 
-An object of this class would already have all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, find_by, sql, create, update, save, delete, validate.*
-Here is an example on how you could use this:
+An object of this class would already have all the fields, the database table has. All models provide a base-set of functionalities: *all, count, find, first, last, where, sql, create, update, save, delete, validate.*
+Since Jhana provides you a query builder, you can create your queries by concatinating methods
+Here are some examples on how you could use this:
 ```php
 // Use constructor to pass attributes
 $user = new User(['name' => 'Homer Simpson']);
 $user->email = 'homer@springfield.com';
 $user->save();
 
-// Use the find method to get a single object.
-// The parameter is always the id of the object.
-$user = User::find(23);
+// Use find method to get objects directly
+$user = User::find(23)->get();
 $user->name = 'Homer Simpson';
 $user->save();
 
-// Use the find_by method to get an array of objects.
-// Also ORDER, LIMIT and so on are available.
-$user = User::find_by(['name' => 'Homer Simpson', 'ORDER' => 'id DESC'])[0];
+// Parameters for find can be a single id or an array of ids
+User::find([1,2,3])->update(['name' => 'Homer Simpson']);
+
+
+// Use the where method to create a custom WHERE clause
+$user = User::all()->where('firstname = ? AND lastname = ?', ['Homer', 'Simpson'])->first()->count();
 $user->update(['name' => 'Bart Simpson']);
 
 // Use the create method
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
 
-// Use direct SQL with prepared statement support
-$user = User::sql('SELECT * FROM users WHERE name = ?', ['Homer Simpson'])[0];
+// Use LIMIT and OFFSET
+User::all()->limit(3)->offset(3)->delete();
 ```
-For more details (ORDER, LIMIT ...), please have look at http://medoo.in/api/where until we can provide you a better documentation.
 
 Jhana also provides more advanced features like Relations, Validations and Callbacks.
 Here an example for **Relations**:
@@ -88,9 +91,13 @@ function users() {
 
 ```
 For *belongs_to* and *has_many* there is also an optional parameter where a reference column name can be defined.
-Those relations could then be used as follows:
+Those relations could then be used smoothely with the query builder:
 ```php
-$user_tasks = $user->tasks();
+// Get a user which belongs to a certain task
+$users = Task::find(3)->user()->get();
+
+// Or a little more complex...
+User::find(3)->tasks()->last()->update(['name' => 'Bart Simpson']);
 ```
 
 **Validations** are executed automatically if a model gets saved. The Validation functionname has to begin with "validate_". The return value has to be boolean.
@@ -134,26 +141,37 @@ function callback_before_delete() {
 ```
 
 
-### Creating Controllers
+### Controllers
 Each Request calls a Controller-Method (let's call them actions). 
+Similar to the Model, the Controller also uses method chaining to provide you with functionality.
 
 ```php
 class UserController extends ApplicationController {
 		
 	// Show all users
-	static function index($params) {
+	function index($params) {
 		$users = User::all();
-		self::render(['users' => $users], 'Users overview');
+		self::render()->params(['users' => $users])->do();
 	}
 		
 	// Show details of a spefic user. 
-	static function show($params) {
-		$user = User::find($params['id']);
-		self::render(['user' => $user]);
+	function show($params) {
+		$user = User::find($params['id'])->get();
+		self::render()->params(['user' => $user])->view('user/my_custom_show_view')->layout('layouts/my_custom_layout')->do();
+	}
+	
+	// Redirects the user to a site
+	function my_redirect_action($params) {
+		self::redirect()->to('http://google.com')->do();
+	}
+	
+	// Redirects the user to a route defined in *config/routes.php*
+	function my_redirect_action_with_route($params) {
+		self::redirect()->to('my_route')->do();
 	}
 }
 ```
-Simple, isn't it? Each Controller-Action calls either ```self::render(...);``` or ```self::redirect(...);``` and can pass parameters to views in the render-method (like shown above). The second parameter of the render method is optional and sets the page-title for the view. If you ommit this title-parameter, Jhana will then use your Application title as defined in your config.php. 
+Simple, isn't it? Each Controller-Action calls either ```self::render()-> ... ->do();``` or ```self::redirect()-> ... ->do();```.
 
 
 Controllers also provide filtering. Filters are always executed BEFORE an action is called. A convention is, that filter functionnames begin with "filter_". They can be used as follows:
@@ -162,19 +180,19 @@ class UserController extends ApplicationController {
 
   	// The filter array maps filters to actions
   	// If no actions are specified, the filter applies to all actions
-	protected static $filters = [
+	protected $filters = [
 		'filter_all', 'filter_test' => ['show']
 	];
 		
 	// An ordinary action
-	static function show($params) {
+	function show($params) {
 		$user = User::find($params['id']);
 		self::render(['user' => $user]);
 	}
 
   	// This filter function is executed before show() is executed
   	// The Jhana::route helper generates an URL for path-names defined in routes.php
-	protected static function filter_test(&params) {
+	protected function filter_test(&params) {
 		if (empty($_SESSION["user_id"]))
 				self::redirect(Jhana::route("root_path"));
 	}

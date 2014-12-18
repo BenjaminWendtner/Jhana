@@ -54,6 +54,14 @@
 		}
 		
 		/**
+		 * Gets the notices from the Session-Array.
+		 * @return $notices: The notices.
+		 */
+		 public static function notices() {
+		 	return $_SESSION['notices'];
+		 }
+		 
+		/**
 		 * Generates URL.
 		 * @param $route_name: An abitrary named route from config/routes.php.
 		 * @param $params: If route needs parameters.
@@ -61,6 +69,27 @@
 		 */
 		public static function route($route_name, $params=[]) {
 			return self::$router->generate($route_name, $params);
+		}
+		
+		/**
+		 * Iterates through a given folder recursively. 
+		 * This is used for example to find all assets in all subfolders.
+		 * @param $pattern: The folder path.
+		 * @return Array of files.
+		 */
+		public static function recursive_glob($pattern, $flags = 0) {
+	    	$files = glob($pattern, $flags);
+	     	foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)
+				$files = array_merge($files, self::recursive_glob($dir.'/'.basename($pattern), $flags));
+	
+	  		return $files;
+	  	}
+		
+		/**
+		 * Checks if a field is an URL.
+		 */
+		public static function validate_url($field) {
+			 return preg_match('#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS', $field);
 		}
 		
 		/**
@@ -130,19 +159,5 @@
 		public static function validate_exists_in($field, $array) {
 			return in_array($field, $array);
 		}
-		
-		/**
-		 * Iterates through a given folder recursively. 
-		 * This is used for example to find all assets in all subfolders.
-		 * @param $pattern: The folder path.
-		 * @return Array of files.
-		 */
-		public static function recursive_glob($pattern, $flags = 0) {
-	    	$files = glob($pattern, $flags);
-	     	foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)
-				$files = array_merge($files, self::recursive_glob($dir.'/'.basename($pattern), $flags));
-	
-	  		return $files;
-	  	}
 	}
 ?>
