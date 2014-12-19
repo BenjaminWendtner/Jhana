@@ -41,6 +41,7 @@
 		 * Displays the Jhana Error page with more details.
 		 */
 		public static function exception($name, $params=[]) {
+			ob_end_clean();
 			require_once 'external/jhana/Exception.php';
 			exit;
 		}

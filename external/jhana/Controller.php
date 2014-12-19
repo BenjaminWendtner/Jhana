@@ -67,6 +67,9 @@
 			if (!file_exists($view))
 				Jhana::exception('view_not_found', ["view" => $view]);
 			
+			// If error occures in view, show Jhana error instead of output
+			ob_start();
+			
 			if (isset($_SERVER['HTTP_X_PJAX'])) {
 				echo '<div id="pjax-response" data-title="'.$title.'">';
 				require_once $layout;

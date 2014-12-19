@@ -19,7 +19,7 @@
 				<br/><br/>
 				
 				<ul>
-					<li>Check your database configuration config/routes.php</li>
+					<li>Check your database configuration config/config.php</li>
 				</ul>
 		<?php }
 		
@@ -109,10 +109,10 @@
 			elseif ($name == 'sql_error') { ?>
 				<b>You have an error in your MySQL!</b>
 				<br/><br/>
-	
+				
 				<?php 
 					foreach (debug_backtrace() as $trace)
-						if ($trace['class'] == 'Model' && $trace['function'] != 'execute_query')
+						if (!empty($trace['class']) && $trace['class'] == 'Model' && $trace['function'] != 'execute_query')
 							break;
 					
 					Jhana::print_exception_location($trace);
