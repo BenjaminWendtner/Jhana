@@ -27,13 +27,26 @@
 		private $limit;
 		private $offset;
 		
-
 		/**
 		 * Static method for setting up the database.
 		 */
 		public static function set_database() {
-	       self::$database = new PDO(DB_TYPE.':host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
-		   self::$database->query("SET CHARACTER SET utf8");
+			
+			// MySQL, PostgresSQL
+		   	if (DB_TYPE == 'mysql' || DB_TYPE == 'pgsql')
+	       			self::$database = new PDO(DB_TYPE.':host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
+
+			// SQL Lite
+			else if (DB_TYPE == 'sqlite')
+				self::$database = new PDO(DB_TYPE.':'.DB_PORT);
+	
+			// Oracle
+			else if (DB_TYPE == 'oracle')
+				self::$database = new PDO('OCI:dbname=//'.DB_HOST.':'.DB_PORT.'/'.DB_NAME, DB_USER, DB_PASSWORD);
+			   
+	
+			// Set the charset to UTF-8
+			self::$database->query("SET CHARACTER SET utf8");
 	   	}
 		
 		/**
