@@ -19,7 +19,7 @@ Here are some Core-Features of Jhana:
 + LESS Support (Serverside compiled and cached)
 + PHP - Routing
 + Localization
-+ Database abstraction (Supports MySQL, SQLite, PostgresSQL, Oracle and so on)
++ Database abstraction (Supports MySQL, SQLite, PostgresSQL, Oracle)
 
 
 ### Installation
@@ -37,7 +37,7 @@ Each Model represents a table in your database. All columns are mapped automatic
 class User extends Model {
 		
 	// Table name
-	protected static $table_name = 'users';
+	protected $table = 'users';
 }
 ```
 
@@ -59,10 +59,10 @@ $user->save();
 User::find([1,2,3])->update(['name' => 'Homer Simpson']);
 
 // Use the where method to create a custom WHERE clause
-$count = User::all()->where('firstname = ? AND lastname = ?', ['Homer', 'Simpson'])->count();
+$count = User::all()->where('firstname = ?', ['Homer'])->count();
 
 // Use get(), count(), update() or delete() at the end of your query
-User::all()->where('firstname = ?', ['Homer'])->first()->delete();
+User::all()->first()->delete();
 
 // Use the create method
 $user = User::create(['name' => 'Homer Simpson', 'email' => 'homer@springfield.com']);
