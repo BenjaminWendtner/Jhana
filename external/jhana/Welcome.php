@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title><?php echo $title; ?></title>
+		<title>Welcome to Jhana</title>
 
 		<!-- jQuery -->
 		<script src="<?php echo BASE_PATH; ?>external/jquery/jquery_2.1.1.min.js"></script>
