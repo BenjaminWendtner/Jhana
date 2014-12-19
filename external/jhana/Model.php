@@ -517,7 +517,10 @@
 		 * @return The result of the PDO query.
 		 */
 		private function execute_query($query) {
-			
+
+			if (empty(self::$database))
+				Jhana::exception('database_connection_error');
+				
 			// Prepare statement
 			$stmt = self::$database->prepare($query);
 			
