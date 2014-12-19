@@ -33,6 +33,8 @@
 		 */
 		public static function set_database() {
 			
+			if (!defined('DB_TYPE')) return;
+			
 			try {
 			   // MySQL, PostgresSQL
 			   if (DB_TYPE == 'mysql' || DB_TYPE == 'pgsql')
