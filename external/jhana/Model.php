@@ -33,21 +33,24 @@
 		 */
 		public static function set_database() {
 			
-			// MySQL, PostgresSQL
-		   if (DB_TYPE == 'mysql' || DB_TYPE == 'pgsql')
-	       		self::$database = new PDO(DB_TYPE.':host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
-
-		   // SQL Lite
-		   else if (DB_TYPE == 'sqlite')
-		   		self::$database = new PDO(DB_TYPE.':'.DB_PORT);
-
-		   // Oracle
-		   else if (DB_TYPE == 'oracle')
-		   		self::$database = new PDO('OCI:dbname=//'.DB_HOST.':'.DB_PORT.'/'.DB_NAME, DB_USER, DB_PASSWORD);
+			try {
+			   // MySQL, PostgresSQL
+			   if (DB_TYPE == 'mysql' || DB_TYPE == 'pgsql')
+		       		self::$database = new PDO(DB_TYPE.':host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
+	
+			   // SQL Lite
+			   else if (DB_TYPE == 'sqlite')
+			   		self::$database = new PDO(DB_TYPE.':'.DB_PORT);
+	
+			   // Oracle
+			   else if (DB_TYPE == 'oracle')
+			   		self::$database = new PDO('OCI:dbname=//'.DB_HOST.':'.DB_PORT.'/'.DB_NAME, DB_USER, DB_PASSWORD);
+			} catch (Exception $e) {
+				Jhana::exception('database_connection_error');
+			}
 		   
-
-		   // Set the charset to UTF-8
-		   self::$database->query("SET CHARACTER SET utf8");
+		  	 // Set the charset to UTF-8
+		  	 self::$database->query("SET CHARACTER SET utf8");
 	   	}
 		
 		/**
@@ -522,7 +525,8 @@
 					$stmt->bindParam($i + 1, $this->params[$i]);
 		
 			// Execute query
-			$stmt->execute();
+			if ($stmt->execute() == FALSE)
+				Jhana::exception('sql_error', ['query' => $query, 'params' => $this->params]);
 			
 			// Reinitialize the $params array.
 			$this->params = [];

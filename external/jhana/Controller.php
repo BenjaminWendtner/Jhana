@@ -26,19 +26,19 @@
 		 * @param $params: The parameters are called by reference, so that a filter
 		 * 				   can edit params before they reach the action.
 		 */	
-		public static function filter(&$params) {
+		public function filter(&$params) {
 			
-			if (isset(static::$filters) == FALSE) return;
+			if (isset($this->filters) == FALSE) return;
 			
-			foreach (static::$filters as $key => $value) {
+			foreach ($this->filters as $key => $value) {
 				
 				// If filter affects all actions
 				if (empty($key))
-					static::$value($params);
+					$this->$value($params);
 				
 				// If filter affects only certain actions
 				elseif (in_array($_GET['action'], $value))
-					static::$key($params);
+					$this->$key($params);
 			}
 		}
 		
@@ -59,13 +59,17 @@
 
 			// Use default layout if no layout is provided
 			$layout = ($this->layout == '') ? 'views/layouts/layout.php' : 'views/'.$this->layout.'.php';
+			if (!file_exists($layout))
+				Jhana::exception('layout_not_found', ["layout" => $layout]);
 			
 			// Use default view if no view is provided
 			$view = ($this->view == '') ? 'views/'.$_GET['controller'].'/'.$_GET['action'].'.php' : 'views/'.$this->view.'.php';
+			if (!file_exists($view))
+				Jhana::exception('view_not_found', ["view" => $view]);
 			
 			if (isset($_SERVER['HTTP_X_PJAX'])) {
 				echo '<div id="pjax-response" data-title="'.$title.'">';
-				require_once $layout.'.php';
+				require_once $layout;
 				echo '</div>';
 			} else
 				require_once 'views/layouts/main.php';
@@ -73,7 +77,6 @@
 			// Unset $notices
 			unset($_SESSION['notices']);
 			
-			// Exit after rendering
 			exit;
 		}
 		
@@ -89,7 +92,6 @@
 			else	
 				header('Location: '.$this->url);
 
-			// Exit after redirecting
 			exit;
 		}
 		
@@ -191,5 +193,5 @@
 		}		
 
 	}
-	
+
 ?>

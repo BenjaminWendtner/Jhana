@@ -17,6 +17,48 @@
 		}
 		
 		/**
+		 * Requires all assets.
+		 */
+		public static function load_assets() {
+			require_once 'Assets.php';
+		}
+		
+		/**
+		 * Iterates through a given folder recursively. 
+		 * This is used for example to find all assets in all subfolders.
+		 * @param $pattern: The folder path.
+		 * @return Array of files.
+		 */
+		public static function recursive_glob($pattern, $flags = 0) {
+	    	$files = glob($pattern, $flags);
+	     	foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)
+				$files = array_merge($files, self::recursive_glob($dir.'/'.basename($pattern), $flags));
+	
+	  		return $files;
+	  	}
+		
+		/**
+		 * Displays the Jhana Error page with more details.
+		 */
+		public static function exception($name, $params=[]) {
+			require_once 'external/jhana/Exception.php';
+			exit;
+		}
+		
+		/**
+		 * Print location of error.
+		 * This is used by the Jhana error page.
+		 */
+		public static function print_exception_location($trace) {
+			$path = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
+			$file = str_replace($path, '', $trace['file']);
+			
+			echo 'In <b>'.$file.'</b> on line <b>'.$trace['line'].'</b>:<br />';
+			echo str_replace(['<?php','?>'], '', file($trace['file'])[$trace['line'] - 1]);
+		}
+		
+		
+		/**
 		 * Translates a given string using the language files 
 		 * located in config/languages/. This function does not return anything
 		 * but directly prints the result.
@@ -47,13 +89,6 @@
 		}
 		
 		/**
-		 * Requires all assets.
-		 */
-		public static function load_assets() {
-			require_once 'Assets.php';
-		}
-		
-		/**
 		 * Gets the notices from the Session-Array.
 		 * @return $notices: The notices.
 		 */
@@ -62,28 +97,18 @@
 		 }
 		 
 		/**
-		 * Generates URL.
+		 * Tries to generate URL.
 		 * @param $route_name: An abitrary named route from config/routes.php.
 		 * @param $params: If route needs parameters.
 		 * @return string: The URL.
 		 */
 		public static function route($route_name, $params=[]) {
-			return self::$router->generate($route_name, $params);
+			try {
+				return self::$router->generate($route_name, $params);
+			} catch (Exception $e){
+				Jhana::exception('route_not_found', ['route' => $route_name]);
+			}
 		}
-		
-		/**
-		 * Iterates through a given folder recursively. 
-		 * This is used for example to find all assets in all subfolders.
-		 * @param $pattern: The folder path.
-		 * @return Array of files.
-		 */
-		public static function recursive_glob($pattern, $flags = 0) {
-	    	$files = glob($pattern, $flags);
-	     	foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)
-				$files = array_merge($files, self::recursive_glob($dir.'/'.basename($pattern), $flags));
-	
-	  		return $files;
-	  	}
 		
 		/**
 		 * Checks if a field is an URL.
@@ -160,4 +185,5 @@
 			return in_array($field, $array);
 		}
 	}
+
 ?>

@@ -27,25 +27,28 @@
 	Jhana::set_router($router);
 	foreach(glob('helpers/*.php') as $helper)
 	    require_once $helper;
-	
+
+	// Extract controller name and  action name
 	if (!empty($match['target'])) {
-		// Extract controller name
 		$_GET['controller'] = explode('#', $match['target'])[0];
 		$controller_name = ucfirst($_GET['controller']).'Controller';
-		
-		// Extract action name
+
 		$_GET['action'] = explode('#', $match['target'])[1];
 	}
 	
 	// If controller or action is undefined, response with Welcome page or 404 Error
 	if (empty($_GET['controller']) || empty($_GET['action'])) {
+		
+		// Welcome page
 		if (BASE_PATH == $_SERVER['REQUEST_URI'])
 			require_once 'external/jhana/Welcome.php';
+		
+		// 404 sit not found page
 		else {
 			header('HTTP/1.0 404 Not Found');
 			$title = '404 - Site not found';
-			$layout = 'views/layouts/layout.php';
 			$view = 'views/errors/404.php';
+			$layout = 'views/layouts/layout.php';
 			require_once 'views/layouts/main.php';
 		}
 		
@@ -58,15 +61,25 @@
 	foreach(glob('models/*.php') as $model)
 	    require_once $model;
 
-	// Require only the controller which is needed
 	require_once 'external/jhana/Controller.php';
 	require_once 'controllers/ApplicationController.php';
+	
+	// Check if controller exists
+	if (!file_exists('controllers/'.$controller_name.'.php'))
+		Jhana::exception('controller_not_found', ["controller" => $controller_name]);
+	
+	// Require only the controller which is needed
 	require_once 'controllers/'.$controller_name.'.php';
+	$controller = new $controller_name();
 	
 	// Execute filters
-	$controller_name::filter($match['params']);
+	$controller->filter($match['params']);
 
-	// Call action
-	$controller_name::$_GET['action']($match['params']);
+	// Check if action exsits
+	if (!method_exists($controller, $_GET['action']))
+		Jhana::exception('action_not_found', ["action" => $_GET['action'], "controller" => $controller_name]);
 	
+	// Call action
+	$controller->$_GET['action']($match['params']);
+
 ?>
