@@ -28,12 +28,14 @@
 	foreach(glob('helpers/*.php') as $helper)
 	    require_once $helper;
 	
-	// Extract controller name
-	$_GET['controller'] = explode('#', $match['target'])[0];
-	$controller_name = ucfirst($_GET['controller']).'Controller';
-	
-	// Extract action name
-	$_GET['action'] = explode('#', $match['target'])[1];
+	if (!empty($match['target'])) {
+		// Extract controller name
+		$_GET['controller'] = explode('#', $match['target'])[0];
+		$controller_name = ucfirst($_GET['controller']).'Controller';
+		
+		// Extract action name
+		$_GET['action'] = explode('#', $match['target'])[1];
+	}
 	
 	// If controller or action is undefined, response with Welcome page or 404 Error
 	if (empty($_GET['controller']) || empty($_GET['action'])) {
