@@ -43,6 +43,8 @@
 			require_once 'external/jhana/Welcome.php';
 		else {
 			header('HTTP/1.0 404 Not Found');
+			$title = '404 - Site not found';
+			$layout = 'views/layouts/layout.php';
 			$view = 'views/errors/404.php';
 			require_once 'views/layouts/main.php';
 		}
