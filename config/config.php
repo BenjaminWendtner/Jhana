@@ -1,7 +1,7 @@
 <?php
 	
 	// Application title
-	define('APP_TITLE', 	 'My ToDo List');
+	define('APP_TITLE', 	 'My Jhana App');
 
 	// DB Configuration
 	/*
