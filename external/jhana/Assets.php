@@ -1,5 +1,5 @@
 <!-- jQuery -->
-<script src="<?php echo BASE_PATH; ?>external/jquery/jquery_2.1.1.min.js"></script>
+<script src="<?php echo BASE_PATH; ?>external/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap -->
 <link href="<?php echo BASE_PATH; ?>external/bootstrap/css/bootstrap.min.css" rel="stylesheet">
