@@ -7,7 +7,7 @@
 	/*
 	 	define('DB_USER',		 '...');
 		define('DB_NAME',		 '...');
-		define('DB_PASSWORD',	 '...');
+		define('DB_PASSWORD',		 '...');
 		define('DB_HOST',		 'localhost');
 		define('DB_TYPE',		 'mysql');
 		define('DB_PORT',		 '');
