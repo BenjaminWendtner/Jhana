@@ -63,6 +63,24 @@
 							</div>
 					<?php }
 					
+						// Cache not writable
+						elseif ($name == 'cache_not_writable') { ?>
+							
+							<div class="panel-heading">
+								<h1>Cache not writable</h1>
+							</div>
+							
+							<div class="panel-body">
+								<p class="lead error-description">Jhana could not write to the <b>/external/less/cache</b> directory.</p>
+								
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Login to your FTP and make sure, the <b>/external/less/cache</b> directory has writing access.</li>
+								</ul>
+							</div>
+							
+					<?php }
+					
 						// Route not found exception
 						elseif ($name == 'route_not_found') { ?>
 							
@@ -71,7 +89,7 @@
 							</div>
 							
 							<div class="panel-body">
-								<p class="lead error-description">The route "<?php echo $params['route']; ?>" was not found among your routes.</p>
+								<p class="lead error-description">The route <b><?php echo $params['route']; ?></b> was not found among your routes.</p>
 								
 								<p class="lead">How to solve this problem:</p>
 								<ul>

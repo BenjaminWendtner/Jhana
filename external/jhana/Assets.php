@@ -22,7 +22,11 @@
 <!-- Less -->
 <?php 
 	require 'external/less/Cache.php';
+	
 	Less_Cache::$cache_dir = 'external/less/cache';
+		
+	if (!is_writable(Less_Cache::$cache_dir))
+		Jhana::exception('cache_not_writable');
 	
 	$files = array();
 	foreach(Jhana::recursive_glob('assets/css/*.less') as $less)
