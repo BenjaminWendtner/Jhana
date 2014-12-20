@@ -6,137 +6,230 @@
 
 		<!-- Bootstrap -->
 		<link href="<?php echo BASE_PATH; ?>external/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		<script src="<?php echo BASE_PATH; ?>external/bootstrap/js/bootstrap.min.js"></script>
+		
+		<style>
+			.panel-danger .panel-heading {
+				background-color: #d1001d ;
+				color: white;
+			}
+			
+			p.lead {
+				margin: 30px 0 5px 0;
+			}
+			
+			p.error-description {
+				margin: 15px 0 5px 0;
+				color: #d1001d;
+			}
+			
+			ul {
+				list-style: square;
+			}
+			
+			h1 {font-size: 1.8em;}
+			
+			@media (min-width: 768px) {
+				.row {
+					margin-top: 30px;
+				}
+				
+				h1 {font-size: 2.4em;}
+			}		
+		</style>
 	</head>
   
 	<body>
-		
-		<?php 
-			
-			// Database connection exception
-			if ($name == 'database_connection_error') { ?>
-				<b>Could not connect to database!</b>
-				<br/><br/>
-				
-				<ul>
-					<li>Check your database configuration config/config.php</li>
-				</ul>
-		<?php }
-		
-		 	// Route not found exception
-			elseif ($name == 'route_not_found') { ?>
-				<b>Route not found!</b>
-				<br/><br/>
-				The route "<?php echo $params['route']; ?>" was not found among your routes.<br/><br/>
-				
-				<ul>
-					<li>Check if the route exists in config/rotues.php.</li>
-					<li>Check your route name for typos.</li>
-				</ul>
-		<?php }
-		
-		 	// Controller not found exception
-			elseif ($name == 'controller_not_found') { ?>
-				<b>Controller not found!</b>
-				<br/><br/>
-				"<?php echo $params['controller']; ?>" was not found in the controllers folder.<br/><br/>
-				
-				<ul>
-					<li>Check if the controller file exists in the controllers folder.</li>
-					<li>Check your controller name for typos.</li>
-					<li>Check your route for typos.</li>
-				</ul>
-		<?php } 
-			
-			// Action not found exception
-			elseif ($name == 'action_not_found') { ?>
-				<b>Action not found!</b>
-				<br/><br/>
-				The action "<?php echo $params['action']; ?>" was not found in <?php echo $params['controller']; ?>.<br/><br/>
-				
-				<ul>
-					<li>Check if the controller contains the action.</li>
-					<li>Check your action name for typos.</li>
-					<li>Check your route for typos.</li>
-				</ul>
-		<?php } 
-			
-			// Layout not found exception
-			elseif ($name == 'layout_not_found') { ?>
-				<b>Layout not found!</b>
-				<br/><br/>
-				
-				The layout "<?php echo $params['layout']; ?>" was not found.<br/><br/>
-				
-				<?php 
-					foreach (debug_backtrace() as $trace)
-						if ($trace['function'] == 'do')
-							break;
-					
-					Jhana::print_exception_location($trace);
-				?>
-				
-				<br/><br/>
-				<ul>
-					<li>Check if the layout exists in the views folder.</li>
-					<li>Check your layout path in your controller.</li>
-				</ul>
-		<?php } 
-			
-			// View not found exception
-			elseif ($name == 'view_not_found') { ?>
-				<b>View not found!</b>
-				<br/><br/>
-				
-				The view "<?php echo $params['view']; ?>" was not found.<br/><br/>
-				
-				<?php 
-					foreach (debug_backtrace() as $trace)
-						if ($trace['function'] == 'do')
-							break;
-					
-					Jhana::print_exception_location($trace);
-				?>
-				
-				<br/><br/>
-				<ul>
-					<li>Check if the view exists in the views folder.</li>
-					<li>Check your view path in your controller.</li>
-				</ul>
-		<?php } 
-		
-			// SQL exception
-			elseif ($name == 'sql_error') { ?>
-				<b>You have an error in your MySQL!</b>
-				<br/><br/>
-				
-				<?php 
-					foreach (debug_backtrace() as $trace)
-						if (!empty($trace['class']) && $trace['class'] == 'Model' && $trace['function'] != 'execute_query')
-							break;
-					
-					Jhana::print_exception_location($trace);
-				?>
-	
-				<br/><br/>
-				Here the SQL which resulted from your query:<br />
-				<?php 
-					foreach ($params['params'] as $param)
-						if (is_string($param))
-							$params['query'] = preg_replace('/[?]/', '\''.$param.'\'', $params['query'], 1);
-						else
-							$params['query'] = preg_replace('/[?]/', $param, $params['query'], 1);
-					
-					echo $params['query'];
-				?>
-				
-				<br /><br />
-				<ul>
-					<li>Check your query for errors.</li>
-					<li>Make shure the table exists in the database.</li>
-					<li>Make shure the column exists in the database.</li>
-				</ul>
-		<?php } ?>
 
+		<div class="row">
+			<div class="col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
+				<div class="panel panel-danger">
+	
+					<?php 
+						
+						// Database connection exception
+						if ($name == 'database_connection_error') { ?>
+							
+							<div class="panel-heading">
+								<h1>Could not connect to database</h1>
+							</div>
+							
+							<div class="panel-body">
+								<p class="lead error-description">Jhana was not able to connect to your database.</p>
+								
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Check your database configuration config/config.php</li>
+								</ul>
+							</div>
+					<?php }
+					
+						// Route not found exception
+						elseif ($name == 'route_not_found') { ?>
+							
+							<div class="panel-heading">
+								<h1>Route not found</h1>
+							</div>
+							
+							<div class="panel-body">
+								<p class="lead error-description">The route "<?php echo $params['route']; ?>" was not found among your routes.</p>
+								
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Check if the route exists in config/rotues.php.</li>
+									<li>Check your route name for typos.</li>
+								</ul>
+							</div>
+							
+					<?php }
+					
+						// Controller not found exception
+						elseif ($name == 'controller_not_found') { ?>
+							
+							<div class="panel-heading">
+								<h1>Controller not found</h1>
+							</div>
+							
+							<div class="panel-body">
+							
+								<p class="lead error-description"><b><?php echo $params['controller']; ?>.php</b> was not found in the controllers folder.</p>
+							
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Check if the controller file exists in the controllers folder.</li>
+									<li>Check your controller name for typos.</li>
+									<li>Check your route for typos.</li>
+								</ul>
+							</div>
+					<?php } 
+						
+						// Action not found exception
+						elseif ($name == 'action_not_found') { ?>
+							
+							<div class="panel-heading">
+								<h1>Action not found</h1>
+							</div>
+							
+							<div class="panel-body">
+							
+								<p class="lead error-description">The action <b><?php echo $params['action']; ?>.php</b> was not found in <?php echo $params['controller']; ?>.</p>
+							
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Check if the controller contains the action.</li>
+									<li>Check your action name for typos.</li>
+									<li>Check your route for typos.</li>
+								</ul>
+							
+							</div>
+					<?php } 
+						
+						// Layout not found exception
+						elseif ($name == 'layout_not_found') { ?>
+							
+							<div class="panel-heading">
+								<h1>Layout not found</h1>
+							</div>
+							
+							<div class="panel-body">
+							
+								<p class="lead error-description">The layout <b><?php echo $params['layout']; ?>.php</b> was not found.</p>
+								
+								<p class="lead">
+									<?php 
+										foreach (debug_backtrace() as $trace)
+											if ($trace['function'] == 'do')
+												break;
+										
+										Jhana::print_exception_location($trace);
+									?>
+								</p>
+								<pre><?php Jhana::print_exception_line($trace); ?></pre>
+								
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Check if the layout exists in the views folder.</li>
+									<li>Check your layout path in your controller.</li>
+								</ul>
+							
+							</div>
+					<?php } 
+						
+						// View not found exception
+						elseif ($name == 'view_not_found') { ?>
+							
+							<div class="panel-heading">
+								<h1>View not found</h1>
+							</div>
+							
+							<div class="panel-body">
+							
+								<p class="lead error-description">The view <b><?php echo $params['view']; ?>.php</b> was not found.</p>
+								
+								<p class="lead">
+									<?php 
+										foreach (debug_backtrace() as $trace)
+											if ($trace['function'] == 'do')
+												break;
+										
+										Jhana::print_exception_location($trace);
+									?>
+								</p>
+								<pre><?php Jhana::print_exception_line($trace); ?></pre>
+								
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Check if the view exists in the views folder.</li>
+									<li>Check your view path in your controller.</li>
+								</ul>
+							
+							</div>
+					<?php } 
+					
+						// SQL exception
+						elseif ($name == 'sql_error') { ?>
+								
+							<div class="panel-heading">
+								<h1>You have an error in your query</h1>
+							</div>
+							
+							<div class="panel-body">
+										
+								<p class="lead error-description">You have a syntax error in one of your queries.</p>								
+										
+								<p class="lead">
+									<?php 
+										foreach (debug_backtrace() as $trace)
+											if (!empty($trace['class']) && $trace['class'] == 'Model' && $trace['function'] != 'execute_query')
+												break;
+												
+										Jhana::print_exception_location($trace);
+									?>
+								</p>
+								<pre><?php Jhana::print_exception_line($trace); ?></pre>
+								
+								<p class="lead">Here the SQL which resulted from your query:</p>
+								
+								<?php 
+									foreach ($params['params'] as $param)
+										if (is_string($param))
+											$params['query'] = preg_replace('/[?]/', '\''.$param.'\'', $params['query'], 1);
+										else
+											$params['query'] = preg_replace('/[?]/', $param, $params['query'], 1);
+								?>
+								
+								<pre><?php echo $params['query']; ?></pre>
+								
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Check your query for errors.</li>
+									<li>Make shure the table exists in the database.</li>
+									<li>Make shure the column exists in the database.</li>
+								</ul>			
+							</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+		
 	</body>
 </html>

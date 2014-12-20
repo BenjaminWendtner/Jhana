@@ -47,7 +47,7 @@
 		}
 		
 		/**
-		 * Print location of error.
+		 * Prints the location of the error.
 		 * This is used by the Jhana error page.
 		 */
 		public static function print_exception_location($trace) {
@@ -55,9 +55,18 @@
 			$file = str_replace($path, '', $trace['file']);
 			
 			echo 'In <b>'.$file.'</b> on line <b>'.$trace['line'].'</b>:<br />';
-			echo str_replace(['<?php','?>'], '', file($trace['file'])[$trace['line'] - 1]);
 		}
 		
+		/**
+		 * Print line which contains the error.
+		 * This is used by the Jhana error page.
+		 */
+		public static function print_exception_line($trace) {
+			$path = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
+			$file = str_replace($path, '', $trace['file']);
+			
+			echo trim(str_replace(['<?php','?>'], '', file($trace['file'])[$trace['line'] - 1]));
+		}
 		
 		/**
 		 * Translates a given string using the language files 
