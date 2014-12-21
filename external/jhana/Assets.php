@@ -9,7 +9,6 @@
 <script src="<?php echo BASE_PATH; ?>external/pjax/pjax.min.js"></script>
 
 <!-- Javascript -->
-<script src="<?php echo BASE_PATH; ?>external/jhana/script.js"></script>
 <?php foreach(Jhana::recursive_glob('assets/js/*.js') as $javascript) { ?>
 	<script src="<?php echo $javascript; ?>"></script>
 <?php } ?>
