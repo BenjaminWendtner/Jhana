@@ -129,7 +129,7 @@
 							
 							<div class="panel-body">
 							
-								<p class="lead error-description">The action <b><?php echo $params['action']; ?>.php</b> was not found in <?php echo $params['controller']; ?>.</p>
+								<p class="lead error-description">The action <b><?php echo $params['action']; ?></b> was not found in <?php echo $params['controller']; ?>.</p>
 							
 								<p class="lead">How to solve this problem:</p>
 								<ul>
