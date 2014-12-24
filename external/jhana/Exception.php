@@ -44,10 +44,27 @@
 			<div class="col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
 				<div class="panel panel-danger">
 	
-					<?php 
+					<?php
+					
+						// PHP version error
+						if ($name == 'php_version_error') { ?>
+							
+							<div class="panel-heading">
+								<h1>You need a newer version of PHP</h1>
+							</div>
+							
+							<div class="panel-body">
+								<p class="lead error-description">Jhana needs at least PHP 5.4</p>
+								
+								<p class="lead">How to solve this problem:</p>
+								<ul>
+									<li>Probably you can set the PHP version with one additional line in the .htaccess file.</li>
+								</ul>
+						</div>
+					<?php }
 						
 						// Database connection exception
-						if ($name == 'database_connection_error') { ?>
+						elseif ($name == 'database_connection_error') { ?>
 							
 							<div class="panel-heading">
 								<h1>Could not connect to database</h1>

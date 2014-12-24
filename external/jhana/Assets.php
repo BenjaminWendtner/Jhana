@@ -10,12 +10,12 @@
 
 <!-- Javascript -->
 <?php foreach(Jhana::recursive_glob('assets/js/*.js') as $javascript) { ?>
-	<script src="<?php echo $javascript; ?>"></script>
+	<script src="<?php echo BASE_PATH.$javascript; ?>"></script>
 <?php } ?>
 
 <!-- CSS -->
 <?php foreach(Jhana::recursive_glob('assets/css/*.css') as $css) { ?>
-	<link href="<?php echo $css; ?>" rel="stylesheet">
+	<link href="/<?php echo BASE_PATH.$css; ?>" rel="stylesheet">
 <?php } ?>
 
 <!-- Less -->
