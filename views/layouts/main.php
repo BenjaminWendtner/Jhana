@@ -8,6 +8,6 @@
 	</head>
   
 	<body>
-		<?php require_once 'layout.php'; ?>
+		<?php require_once $layout; ?>
 	</body>
 </html>
