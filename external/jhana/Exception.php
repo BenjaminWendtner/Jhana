@@ -110,7 +110,7 @@
 								
 								<p class="lead">How to solve this problem:</p>
 								<ul>
-									<li>Check if the route exists in config/rotues.php.</li>
+									<li>Check if the route exists in config/routes.php.</li>
 									<li>Check your route name for typos.</li>
 								</ul>
 							</div>
