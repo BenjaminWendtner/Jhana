@@ -74,6 +74,8 @@
 	
 	// Merge URL params with Form params
 	$match['params'] = array_merge($match['params'], $_GET, $_POST, $_FILES);
+	unset($match['params']['controller']);
+	unset($match['params']['action']);
 
 	// Check if action exsits
 	if (!method_exists($controller, $_GET['action']))
