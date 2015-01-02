@@ -72,8 +72,8 @@
 	require_once 'controllers/'.$controller_name.'.php';
 	$controller = new $controller_name();
 	
-	// Execute filters
-	$controller->filter($match['params']);
+	// Merge URL params with Form params
+	$match['params'] = array_merge($match['params'], $_GET, $_POST, $_FILES);
 
 	// Check if action exsits
 	if (!method_exists($controller, $_GET['action']))
