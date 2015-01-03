@@ -297,14 +297,21 @@
 				$objects[] = $this;
 			
 			// Execute callbacks
-			foreach ($objects as $object)
-				if ($object->callback('before_validate') && $object->validate() && 
-				    $object->callback('before_save') && $this->set_timestamps() && 
+			foreach ($objects as $object) {
+				
+				// Create temp object for validation
+				$temp = $object;
+				foreach ($params as $name => $value)
+					$temp->$name = $value;
+				
+				if ($object->callback('before_validate') && $temp->validate() && 
+				    $object->callback('before_save') &&  
 				    $object->callback('before_update'))
 					
 					$validated[$object->old_id] = $object->old_id;
 				else 
 					$failed[] = $object->old_id;
+			}
 					
 			// Use reflection for getting the attributes set by the user
 			$reflect = new ReflectionObject(new self());
@@ -319,7 +326,13 @@
 					$temp_params .= $key.'=?,';
 					$this->params[] = $value;
 				}
-			
+				
+			// Set updated_at timestamp	
+			if (empty($this->set_updated_at) || $this->set_updated_at == TRUE) {
+				$temp_params .= 'updated_at=?,';
+				$this->params[] = date("Y-m-d H:i:s");
+			}
+	
 			// The Update query
 			if (!empty($validated) && $temp_params != '')
 				$this->execute_query('UPDATE '.$this->table.' SET '.rtrim($temp_params, ',').' WHERE id IN ('.implode(',', $validated).')');
