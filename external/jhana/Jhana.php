@@ -133,7 +133,7 @@
 		 * @return Boolean.
 		 */
 		public static function validate_email($field) {
-			return preg_match('/^[_a-z0-9-äÄöÖüÜ]+(\.[_a-z0-9-äÄöÖüÜ]+)*@[a-z0-9-äÄöÖüÜ]+(\.[a-z0-9-äÄöÖüÜ]+)*(\.[a-zäÄöÖüÜ]{2,3})$/i', $field);
+			return preg_match('/^[_a-z0-9-äÄöÖüÜ]+(\.[_a-z0-9-äÄöÖüÜ]+)*@[a-z0-9-äÄöÖüÜ]+(\.[a-z0-9-äÄöÖüÜ]+)*(\.[a-zäÄöÖüÜ]{2,4})$/i', $field);
 		}
 		
 		/**
