@@ -573,10 +573,10 @@
 		private function set_timestamps() {
 			$now = date("Y-m-d H:i:s");
 			
-			if ($this->set_updated_at != FALSE)
+			if (empty($this->set_updated_at) || $this->set_updated_at == TRUE)
 				$this->updated_at = $now;
 			
-			if (empty($this->old_id) && $this->set_created_at != FALSE)
+			if (empty($this->old_id) && (empty($this->set_created_at) || $this->set_created_at == TRUE))
 				$this->created_at = $now;
 			
 			return TRUE;
