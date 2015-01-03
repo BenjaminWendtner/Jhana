@@ -91,7 +91,7 @@
 		private function do_redirect() {
 
 			if (isset($_SERVER['HTTP_X_PJAX']))
-				echo $this->url;
+				header('X-PJAX-URL: '.$this->url);
 			else	
 				header('Location: '.$this->url);
 
