@@ -198,7 +198,7 @@
 							
 							<div class="panel-body">
 							
-								<p class="lead error-description">The view <b><?php echo $params['view']; ?>.php</b> was not found.</p>
+								<p class="lead error-description">The view <b><?php echo $params['view']; ?></b> was not found.</p>
 								
 								<p class="lead">
 									<?php 
